@@ -190,7 +190,7 @@ echo ""
 
 #We will need a JDK, so we try to install the one to match the default OpenJDK JRE that's installed.
 echo "Installing the OpenJDK Java Development Kit."
-apt-get -y install openjdk-7-jdk
+apt-get -y install openjdk-8-jdk
 echo ""
 
 #We need Maven and Git for the OxGarage install.
@@ -209,6 +209,8 @@ echo "Installing linkchecker."
 apt-get -y install linkchecker
 echo ""
 
+#NOTE: WHAT IS THIS DOING? Not sure how saxon stuff ends up in $currDir/bin, given that $currDir is likely 
+#to be the user home, isn't it?
 #Set up saxon command-line executables
 cp ${currDir}/bin/saxon* /usr/bin/
 
@@ -218,6 +220,8 @@ cp ${currDir}/bin/saxon* /usr/bin/
 #apt-get -y --force-yes install libtrang-java saxon tei-p5-exemplars tei-roma tei-p5-doc tei-xsl tei-p5-source tei-p5-schema tei-oxygen zip &&
 #echo ""
 
+#NOTE: Do we still need Hannom? What do we have in the Guidelines that uses Vietnamese?
+#Need a LaTeX guru to look at the PDF build process. No harm in doing this for now, though.
 if [ ! -d /usr/share/fonts/truetype/hannom ]
 then
 {
@@ -256,31 +260,37 @@ echo "Now we download rnv, build and install it."
 #wget -O rnv-1.7.10.zip http://sourceforge.net/projects/rnv/files/Sources/1.7.10/rnv-1.7.10.zip/download
 #wget -O rnv-1.7.10.zip http://downloads.sourceforge.net/projects/rnv/Sources/1.7.10/rnv-1.7.10.zip?r=\&ts=1338494052\&use_mirror=iweb
 #wget -O rnv-1.7.10.zip http://sourceforge.net/projects/rnv/files/Sources/1.7.10/rnv-1.7.10.zip/download?use_mirror=voxel
-curl -L http://sourceforge.net/projects/rnv/files/Sources/1.7.10/rnv-1.7.10.zip/download > rnv-1.7.10.zip
+
+#NOTE: Rewritten. rnv is now at:
+#         https://github.com/hartwork/rnv
+#Zip is now here:
+#         https://github.com/hartwork/rnv/archive/1.7.11.zip
+#curl -L http://sourceforge.net/projects/rnv/files/Sources/1.7.10/rnv-1.7.10.zip/download > rnv-1.7.10.zip
+curl -L https://github.com/hartwork/rnv/archive/1.7.11.zip > rnv-1.7.11.zip
 if [ $? != 0 ]; then
 {
-    echo "Failed to download rnv source code from SourceForge."
+    echo "Failed to download rnv source code from GitHub."
     echo "This is not crucial, but if you want to make sure rnv
 is installed, press Control+C to exit now, and run this
 script again. Otherwise, press return to continue."
     read
 } fi
-unzip rnv-1.7.10.zip
+unzip rnv-1.7.11.zip
 if [ $? != 0 ]; then
 {
-    echo "Failed to unzip the rnv source code from SourceForge."
+    echo "Failed to unzip the rnv source code from GitHub."
     echo "This is not crucial, but if you want to make sure rnv
 is installed, press Control+C to exit now, and run this
 script again. Otherwise, press return to continue."
     read
 } fi
-cd rnv-1.7.10
+cd rnv-1.7.11
 ./configure
 make
 make install
 if [ $? != 0 ]; then
 {
-    echo "Failed to build and install rnv from SourceForge."
+    echo "Failed to build and install rnv from GitHub."
     echo "This is not crucial, but if you want to make sure rnv
 is installed, press Control+C to exit now, and run this
 script again. Otherwise, press return to continue."
