@@ -1,0 +1,29 @@
+[checking]
+anchors=1
+recursionlevel=6
+
+[output]
+#log=xml
+fileoutput=xml
+quiet=1
+status=0
+
+[xml]
+filename=checkResults/linkchecker-out.xml
+
+[filtering]
+
+#This is a multiline thing; each line is a regex specifying something to be ignored.
+#In pre-release mode, we ignore the missing readme file for the next release.
+#We always ignore the mobi, because any given server may not be building it.
+#We ignore tei-c links, google stuff, and unfollowable XPointers.
+#We ignore archive.org links of a particular type because linkchecker does not
+#follow them correctly.
+
+ignore=readme-\d\.\d\.\d\.html
+  Guidelines\.mobi
+  tei-c.org/$
+  google\.com/search
+  #xpointer(id('chum'))
+  http://web.archive.org/web/
+
