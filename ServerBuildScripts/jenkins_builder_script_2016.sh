@@ -155,8 +155,11 @@ echo "Doing system updates before starting on anything else."
 apt-get update
 apt-get -y upgrade
 
+#NOTE: THIS FAILS RIGHT NOW BECAUSE THE KOCHI FONTS HAVE BEEN DEPRECATED.
+#SEEKING A SOLUTION.
 echo "Installing required fonts."
-apt-get -y install ttf-dejavu fonts-arphic-ukai fonts-arphic-uming ttf-baekmuk ttf-junicode ttf-kochi-gothic ttf-kochi-mincho fonts-linuxlibertine
+apt-get -y install ttf-dejavu fonts-arphic-ukai fonts-arphic-uming ttf-baekmuk ttf-junicode fonts-linuxlibertine
+apt-get -y ttf-kochi-gothic ttf-kochi-mincho
 echo ""
 
 #Now add the repositories we want.
@@ -193,13 +196,14 @@ echo "Installing the OpenJDK Java Development Kit."
 apt-get -y install openjdk-8-jdk
 echo ""
 
-#We need Maven and Git for the OxGarage install.
+#We need Maven and Git for the OxGarage install. Note: instead of maven2, we now have
+#the generic "maven" package which at the time of writing is installing maven 3.
 echo "Installing the Maven project tool, and Git"
-apt-get -y install maven2 git
+apt-get -y install maven git
 echo ""
 
 echo "Installing core packages we need."
-apt-get -y install openssh-server libxml2 libxml2-utils devscripts xsltproc libsaxonhe-java debhelper trang jing zip &&
+apt-get -y install openssh-server libxml2 libxml2-utils devscripts xsltproc libsaxonhe-java debhelper trang jing zip unzip &&
 apt-get -y install texlive-xetex texlive-latex-extra texlive-fonts-recommended &&
 echo "Installing curl, required for some tei building stuff."
 apt-get -y install curl &&
@@ -209,10 +213,29 @@ echo "Installing linkchecker."
 apt-get -y install linkchecker
 echo ""
 
-#NOTE: WHAT IS THIS DOING? Not sure how saxon stuff ends up in $currDir/bin, given that $currDir is likely 
-#to be the user home, isn't it?
-#Set up saxon command-line executables
-cp ${currDir}/bin/saxon* /usr/bin/
+#We need to grab some stuff from the Internets. Saxon:
+echo "Retrieving a copy of Saxon jar."
+
+wget -O saxonhe.zip https://sourceforge.net/projects/saxon/files/latest/download?source=files
+  if [ $? != 0 ]; then
+  {
+    echo "Failed to download Saxon from SourceForge."
+    echo "This is fairly important, but if you have 
+already installed Saxon on the system, it won't be a
+problem, so you can press return to continue. If you 
+don't have Saxon already, please place a copy in /usr/bin/
+and re-run this script."
+    read
+  }
+echo "Setting up Saxon."
+mkdir saxon
+unzip -d saxon saxonhe.zip
+chmod a+x saxon/saxon*.jar
+cp saxon/saxon*.jar /usr/bin/
+
+#Next we'll grab some stuff from the TEI Jenkins repo on GitHub.
+mkdir Jenkins
+git clone https://github.com/TEIC/Jenkins.git Jenkins
 
 #TEI packages
 #echo "Installing TEI packages."
@@ -266,39 +289,45 @@ echo "Now we download rnv, build and install it."
 #Zip is now here:
 #         https://github.com/hartwork/rnv/archive/1.7.11.zip
 #curl -L http://sourceforge.net/projects/rnv/files/Sources/1.7.10/rnv-1.7.10.zip/download > rnv-1.7.10.zip
-curl -L https://github.com/hartwork/rnv/archive/1.7.11.zip > rnv-1.7.11.zip
-if [ $? != 0 ]; then
-{
-    echo "Failed to download rnv source code from GitHub."
-    echo "This is not crucial, but if you want to make sure rnv
-is installed, press Control+C to exit now, and run this
-script again. Otherwise, press return to continue."
-    read
-} fi
-unzip rnv-1.7.11.zip
-if [ $? != 0 ]; then
-{
-    echo "Failed to unzip the rnv source code from GitHub."
-    echo "This is not crucial, but if you want to make sure rnv
-is installed, press Control+C to exit now, and run this
-script again. Otherwise, press return to continue."
-    read
-} fi
-cd rnv-1.7.11
-./configure
-make
-make install
-if [ $? != 0 ]; then
-{
-    echo "Failed to build and install rnv from GitHub."
-    echo "This is not crucial, but if you want to make sure rnv
-is installed, press Control+C to exit now, and run this
-script again. Otherwise, press return to continue."
-    read
-} fi
+#curl -L https://github.com/hartwork/rnv/archive/1.7.11.zip > rnv-1.7.11.zip
+#if [ $? != 0 ]; then
+#{
+#    echo "Failed to download rnv source code from GitHub."
+#    echo "This is not crucial, but if you want to make sure rnv
+#is installed, press Control+C to exit now, and run this
+#script again. Otherwise, press return to continue."
+#    read
+#} fi
+#unzip rnv-1.7.11.zip
+#if [ $? != 0 ]; then
+#{
+#    echo "Failed to unzip the rnv source code from GitHub."
+#    echo "This is not crucial, but if you want to make sure rnv
+#is installed, press Control+C to exit now, and run this
+#script again. Otherwise, press return to continue."
+#    read
+#} fi
+#cd rnv-1.7.11
+#./configure
+#make
+#make install
+#if [ $? != 0 ]; then
+#{
+#    echo "Failed to build and install rnv from GitHub."
+#    echo "This is not crucial, but if you want to make sure rnv
+#is installed, press Control+C to exit now, and run this
+#script again. Otherwise, press return to continue."
+#    read
+#} fi
+
+#NOTE: Version of rnv on Hartwork will not build. Getting dtolpin's instead.
+mkdir rnv
+git clone https://github.com/dtolpin/RNV.git rnv
+cd rnv
+make -f Makefile.gnu
+cp rnv /usr/bin/
 
 echo ""
-
 
 #Jenkins
 echo "Installing the Jenkins CI Server."
@@ -325,6 +354,13 @@ cd /tmp
 wget http://localhost:$JENKINS_PORT/jnlpJars/jenkins-cli.jar
 JINKSVERSION=`java -jar jenkins-cli.jar -s http://localhost:$JENKINS_PORT version`
 echo "version $JINKSVERSION"
+
+#THIS IS TEST STOP POINT FOR NOW. CONTINUE ONLY ONCE THIS IS ALL WORKING.#
+#RIGHT NOW, the only remaining issue above this point is the Japanese#
+# font problem.#
+echo "Exiting for now..."
+exit
+
 
 #Configuration for Jenkins
 echo "Starting configuration of Jenkins."
