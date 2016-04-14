@@ -358,11 +358,12 @@ echo "version $JINKSVERSION"
 #THIS IS TEST STOP POINT FOR NOW. CONTINUE ONLY ONCE THIS IS ALL WORKING.#
 #RIGHT NOW, the only remaining issue above this point is the Japanese#
 # font problem.#
-echo "Exiting for now..."
+echo "Script tested up to here. Exiting for now..."
 exit
 
 
 #Configuration for Jenkins
+#NOTE: Paths and filenames below are wrong; need to fix.
 echo "Starting configuration of Jenkins."
 cd /var/lib/jenkins
 cp ${currDir}/hudson-log-parse-rules ./
