@@ -3,7 +3,16 @@
   <actions/>
   <description>Runs a script which checks links on the Guidelines HTML output from TEIP5-dev.</description>
   <keepDependencies>false</keepDependencies>
-  <properties/>
+  <properties>
+    <jenkins.model.BuildDiscarderProperty>
+      <strategy class="hudson.tasks.LogRotator">
+        <daysToKeep>-1</daysToKeep>
+        <numToKeep>5</numToKeep>
+        <artifactDaysToKeep>-1</artifactDaysToKeep>
+        <artifactNumToKeep>-1</artifactNumToKeep>
+      </strategy>
+    </jenkins.model.BuildDiscarderProperty>
+  </properties>
   <scm class="hudson.scm.NullSCM"/>
   <canRoam>true</canRoam>
   <disabled>false</disabled>
@@ -18,25 +27,25 @@
   <builders>
     <hudson.tasks.Shell>
       <command>VERSIONFILE=$JENKINS_HOME/jobs/TEIP5-dev/workspace/P5/VERSION
-VERSION=`cat ${VERSIONFILE}` 
-TARGET=$JENKINS_HOME/jobs/TEIP5-dev/lastSuccessful/archive/P5/release/doc/tei-p5-doc/en/html/index.html
-
-
-echo &quot;Running link checking for P5 version $VERSION.&quot;
-
-if [[ $VERSION =~ [a-z]+$ ]]; then
-	echo &quot;Using configuration for pre-release version.&quot;
-	linkchecker --config=$JENKINS_HOME/jobs/Guidelines-Link-Check/linkcheckerrcalphabeta $TARGET
-	
-else
-	echo &quot;Using configuration for release version.&quot;
-	linkchecker --config=$JENKINS_HOME/jobs/Guidelines-Link-Check/linkcheckerrcrelease $TARGET
-fi
-
-echo &quot;Transforming checker report...&quot;
-saxon -s:checkResults/linkchecker-out.xml -xsl:$JENKINS_HOME/jobs/Guidelines-Link-Check/linkchecker.xsl
-echo &quot;Done!&quot;
-exit</command>
+        VERSION=`cat ${VERSIONFILE}` 
+        TARGET=$JENKINS_HOME/jobs/TEIP5-dev/lastSuccessful/archive/P5/release/doc/tei-p5-doc/en/html/index.html
+        
+        
+        echo &quot;Running link checking for P5 version $VERSION.&quot;
+        
+        if [[ $VERSION =~ [a-z]+$ ]]; then
+        echo &quot;Using configuration for pre-release version.&quot;
+        linkchecker --config=$JENKINS_HOME/jobs/Guidelines-Link-Check/linkcheckerrcalphabeta $TARGET
+        
+        else
+        echo &quot;Using configuration for release version.&quot;
+        linkchecker --config=$JENKINS_HOME/jobs/Guidelines-Link-Check/linkcheckerrcrelease $TARGET
+        fi
+        
+        echo &quot;Transforming checker report...&quot;
+        saxon -s:checkResults/linkchecker-out.xml -xsl:$JENKINS_HOME/jobs/Guidelines-Link-Check/linkchecker.xsl
+        echo &quot;Done!&quot;
+        exit</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
@@ -44,7 +53,7 @@ exit</command>
       <unstableOnWarning>false</unstableOnWarning>
       <failBuildOnError>true</failBuildOnError>
       <showGraphs>false</showGraphs>
-      <parsingRulesPath>/var/lib/jenkins/hudson-log-parse-rules</parsingRulesPath>
+      <parsingRulesPath>/var/lib/jenkins/tei-log-parse-rules</parsingRulesPath>
       <useProjectRule>false</useProjectRule>
     </hudson.plugins.logparser.LogParserPublisher>
   </publishers>
