@@ -220,15 +220,16 @@ echo "Retrieving a copy of Saxon jar."
 
 wget -O saxonhe.zip https://sourceforge.net/projects/saxon/files/latest/download?source=files
   if [ $? != 0 ]; then
-  {
-    echo "Failed to download Saxon from SourceForge."
-    echo "This is fairly important, but if you have 
-already installed Saxon on the system, it won't be a
-problem, so you can press return to continue. If you 
+  { 
+     echo "Failed to download Saxon from SourceForge."
+echo "This is fairly important, but if you have 
+already installed Saxon on the system, it won't 
+be a problem, so you can press return to continue. If you 
 don't have Saxon already, please place a copy in /usr/bin/
 and re-run this script."
     read
   }
+  fi
 echo "Setting up Saxon."
 mkdir saxon
 unzip -d saxon saxonhe.zip
