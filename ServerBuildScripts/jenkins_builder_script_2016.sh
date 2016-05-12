@@ -240,9 +240,11 @@ mkdir Jenkins
 git clone https://github.com/TEIC/Jenkins.git Jenkins
 
 #TEI packages
-#NOTE: THIS SET OF PACKAGES SHOULD SURELY BE TRIMMED. I KNOW WE NEED MOST OF THEM, THOUGH.
+#NOTE: THIS SET OF PACKAGES SHOULD SURELY BE TRIMMED. I KNOW WE NEED MANY OF THEM, THOUGH.
+#There's an inordinate quantity of documentation that seems to come down with textlive-xetex;
+#I'm trying --no-install-recommends to prevent that. 
 echo "Installing TEI packages."
-apt-get -y --force-yes install psgml xmlstarlet debiandoc-sgml linuxdoc-tools jing jing-trang-doc libjing-java texlive-xetex &&
+apt-get -y --no-install-recommends --force-yes install psgml xmlstarlet debiandoc-sgml linuxdoc-tools jing jing-trang-doc libjing-java texlive-xetex &&
 apt-get -y --force-yes install libtrang-java saxon tei-p5-exemplars tei-roma tei-p5-doc tei-xsl tei-p5-source tei-p5-schema tei-oxygen zip &&
 echo ""
 
