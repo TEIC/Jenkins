@@ -354,16 +354,33 @@ sleep 20
 sudo -i -u jenkins git config --global user.email $JENKINS_USER_EMAIL
 sudo -i -u jenkins git config --global user.name $JENKINS_USER_NAME
 
-#Now we need to find out what the Jenkins version is, and stash the result in a variable for later use.
-echo "Discovering Jenkins version..."
-cd /tmp
-wget http://localhost:$JENKINS_PORT/jnlpJars/jenkins-cli.jar
-JINKSVERSION=`java -jar jenkins-cli.jar -s http://localhost:$JENKINS_PORT version`
-echo "version $JINKSVERSION"
+#NOTE: THE FOLLOWING FAILS with permission errors; it's not clear to me what's 
+#causing the problem, but I think it's probably the case that we can't use the CLI
+#on the default port any more. See https://github.com/TEIC/Jenkins/issues/1 as I 
+#work on this issue.
+#java -jar jenkins-cli.jar -s http://localhost:8080 version
+#java.io.IOException: No X-Jenkins-CLI2-Port among [X-Jenkins, null, Server, X-Content-Type-Options, #X-You-Are-In-Group, X-Hudson, X-Permission-Implied-By, Date, X-Jenkins-Session, X-You-Are-Authenticated-As, #X-Required-Permission, Set-Cookie, Expires, Content-Length, Content-Type]
+#	at hudson.cli.CLI.getCliTcpPort(CLI.java:284)
+#	at hudson.cli.CLI.<init>(CLI.java:128)
+#	at hudson.cli.CLIConnectionFactory.connect(CLIConnectionFactory.java:72)
+#	at hudson.cli.CLI._main(CLI.java:473)
+#	at hudson.cli.CLI.main(CLI.java:384)
+#	Suppressed: java.io.IOException: Server returned HTTP response code: 403 for URL: http://localhost:8080/cli
+#		at sun.net.www.protocol.http.HttpURLConnection.getInputStream0(HttpURLConnection.java:1840)
+#		at sun.net.www.protocol.http.HttpURLConnection.getInputStream(HttpURLConnection.java:1441)
+#		at hudson.cli.FullDuplexHttpStream.<init>(FullDuplexHttpStream.java:78)
+#		at hudson.cli.CLI.connectViaHttp(CLI.java:152)
+#		at hudson.cli.CLI.<init>(CLI.java:132)
+#		... 3 more
 
-#THIS IS TEST STOP POINT FOR NOW. CONTINUE ONLY ONCE THIS IS ALL WORKING.#
-#RIGHT NOW, the only remaining issue above this point is the Japanese#
-# font problem.#
+#Now we need to find out what the Jenkins version is, and stash the result in a variable for later use.
+#echo "Discovering Jenkins version..."
+#cd /tmp
+#wget http://localhost:$JENKINS_PORT/jnlpJars/jenkins-cli.jar
+#JINKSVERSION=`java -jar jenkins-cli.jar -s http://localhost:$JENKINS_PORT version`
+#echo "version $JINKSVERSION"
+
+
 echo "Script tested up to here. Exiting for now..."
 exit
 
@@ -372,8 +389,8 @@ exit
 #NOTE: Paths and filenames below are wrong; need to fix.
 echo "Starting configuration of Jenkins."
 cd /var/lib/jenkins
-cp ${currDir}/hudson-log-parse-rules ./
-chown jenkins hudson-log-parse-rules
+cp ${currDir}/tei-log-parse-rules ./
+chown jenkins tei-log-parse-rules
 cp ${currDir}/hudson.plugins.logparser.LogParserPublisher.xml ./
 chown jenkins hudson.plugins.logparser.LogParserPublisher.xml
 cp ${currDir}/jenkins.advancedqueue.PriorityConfiguration.xml ./
@@ -462,10 +479,10 @@ echo "Starting the Jenkins server."
 #Now we try making Jinks save its configuration. This appallingly messy line of code comes from
 #using Firefox's Live HTTP Headers extension to figure out what happens when you save the
 #config. If we don't do this, it seems that Jenkins will never figure out that it needs to use the
-#hudson-log-parse-rules file to parse build logs, which means that many errors which aren't really
+#tei-log-parse-rules file to parse build logs, which means that many errors which aren't really
 #errors will appear.
 #echo "Trying to force Jenkins to save its configuration using curl."
-#curl -d "_.rawWorkspaceDir=%24%7BITEM_ROOTDIR%7D%2Fworkspace&_.rawBuildsDir=%24%7BITEM_ROOTDIR%7D%2Fbuilds&system_message=&_.numExecutors=2&_.quietPeriod=5&_.scmCheckoutRetryCount=0&namingStrategy=0&stapler-class=jenkins.model.ProjectNamingStrategy%24DefaultProjectNamingStrategy&stapler-class=jenkins.model.ProjectNamingStrategy%24PatternProjectNamingStrategy&_.namePattern=.*&slaveAgentPort.type=random&stapler-class=hudson.markup.RawHtmlMarkupFormatter&stapler-class=hudson.security.LegacySecurityRealm&stapler-class=hudson.security.HudsonPrivateSecurityRealm&privateRealm.allowsSignup=on&stapler-class=hudson.security.LDAPSecurityRealm&ldap.server=&ldap.rootDN=&ldap.userSearchBase=&ldap.userSearch=&ldap.groupSearchBase=&ldap.managerDN=&ldap.managerPassword=&stapler-class=hudson.security.PAMSecurityRealm&_.serviceName=&authorization=0&stapler-class=hudson.security.AuthorizationStrategy%24Unsecured&stapler-class=hudson.security.LegacyAuthorizationStrategy&stapler-class=hudson.security.FullControlOnceLoggedInAuthorizationStrategy&stapler-class=hudson.security.GlobalMatrixAuthorizationStrategy&stapler-class=hudson.security.ProjectMatrixAuthorizationStrategy&stapler-class=hudson.security.csrf.DefaultCrumbIssuer&name=jobConfigHistory&historyRootDir=&maxHistoryEntries=&excludePattern=queue%7CnodeMonitors%7CUpdateCenter%7Cglobal-build-stats&globalMavenOpts=&stapler-class=hudson.maven.local_repo.DefaultLocalRepositoryLocator&stapler-class=hudson.maven.local_repo.PerExecutorLocalRepositoryLocator&stapler-class=hudson.maven.local_repo.PerJobLocalRepositoryLocator&_.usageStatisticsCollected=on&port.type=random&_.cvsExe=&_.cvspassFile=&svn.workspaceFormat=8&svn.global_excluded_revprop=&svn.storeAuthToDisk=on&shell=&_.url=http%3A%2F%2Flocalhost%3A7070%2F&_.smtpServer=&_.defaultSuffix=&_.adminAddress=address+not+configured+yet+%3Cnobody%40nowhere%3E&_.smtpAuthUserName=&_.smtpAuthPassword=&_.smtpPort=&_.replyToAddress=&_.charset=UTF-8&sendTestMailTo=&log-parser.name=TEI+Log+Parse+Rules&log-parser.path=%2Fvar%2Flib%2Fjenkins%2Fhudson-log-parse-rules&log-parser.name=&log-parser.path=&core%3Aapply=&json=%7B%22rawWorkspaceDir%22%3A+%22%24%7BITEM_ROOTDIR%7D%2Fworkspace%22%2C+%22rawBuildsDir%22%3A+%22%24%7BITEM_ROOTDIR%7D%2Fbuilds%22%2C+%22system_message%22%3A+%22%22%2C+%22%22%3A+%22%22%2C+%22jenkins-model-MasterBuildConfiguration%22%3A+%7B%22numExecutors%22%3A+%222%22%7D%2C+%22jenkins-model-GlobalQuietPeriodConfiguration%22%3A+%7B%22quietPeriod%22%3A+%225%22%7D%2C+%22jenkins-model-GlobalSCMRetryCountConfiguration%22%3A+%7B%22scmCheckoutRetryCount%22%3A+%220%22%7D%2C+%22jenkins-model-GlobalProjectNamingStrategyConfiguration%22%3A+%7B%7D%2C+%22hudson-security-GlobalSecurityConfiguration%22%3A+%7B%7D%2C+%22hudson-security-csrf-GlobalCrumbIssuerConfiguration%22%3A+%7B%7D%2C+%22jenkins-model-GlobalNodePropertiesConfiguration%22%3A+%7B%22globalNodeProperties%22%3A+%7B%7D%7D%2C+%22jenkins-model-GlobalPluginConfiguration%22%3A+%7B%22plugin%22%3A+%7B%22name%22%3A+%22jobConfigHistory%22%2C+%22historyRootDir%22%3A+%22%22%2C+%22maxHistoryEntries%22%3A+%22%22%2C+%22saveSystemConfiguration%22%3A+false%2C+%22excludePattern%22%3A+%22queue%7CnodeMonitors%7CUpdateCenter%7Cglobal-build-stats%22%2C+%22skipDuplicateHistory%22%3A+false%7D%7D%2C+%22hudson-maven-MavenModuleSet%22%3A+%7B%22globalMavenOpts%22%3A+%22%22%2C+%22%22%3A+%220%22%2C+%22localRepository%22%3A+%7B%22stapler-class%22%3A+%22hudson.maven.local_repo.DefaultLocalRepositoryLocator%22%7D%7D%2C+%22hudson-model-UsageStatistics%22%3A+%7B%22usageStatisticsCollected%22%3A+%7B%7D%7D%2C+%22org-jenkinsci-main-modules-sshd-SSHD%22%3A+%7B%22port%22%3A+%7B%22value%22%3A+%22%22%2C+%22type%22%3A+%22random%22%7D%7D%2C+%22hudson-scm-CVSSCM%22%3A+%7B%22cvsExe%22%3A+%22%22%2C+%22cvspassFile%22%3A+%22%22%2C+%22cvs_noCompression%22%3A+false%7D%2C+%22hudson-scm-SubversionSCM%22%3A+%7B%22workspaceFormat%22%3A+%228%22%2C+%22global_excluded_revprop%22%3A+%22%22%2C+%22storeAuthToDisk%22%3A+%7B%7D%7D%2C+%22hudson-tasks-Shell%22%3A+%7B%22shell%22%3A+%22%22%7D%2C+%22hudson-tasks-Mailer%22%3A+%7B%22url%22%3A+%22http%3A%2F%2Flocalhost%3A7070%2F%22%2C+%22smtpServer%22%3A+%22%22%2C+%22defaultSuffix%22%3A+%22%22%2C+%22adminAddress%22%3A+%22address+not+configured+yet+%3Cnobody%40nowhere%3E%22%2C+%22useSsl%22%3A+false%2C+%22smtpPort%22%3A+%22%22%2C+%22replyToAddress%22%3A+%22%22%2C+%22charset%22%3A+%22UTF-8%22%7D%2C+%22hudson-plugins-logparser-LogParserPublisher%22%3A+%7B%22rule%22%3A+%5B%7B%22name%22%3A+%22TEI+Log+Parse+Rules%22%2C+%22path%22%3A+%22%2Fvar%2Flib%2Fjenkins%2Fhudson-log-parse-rules%22%7D%2C+%7B%22name%22%3A+%22%22%2C+%22path%22%3A+%22%22%7D%5D%7D%2C+%22core%3Aapply%22%3A+%22%22%7D&Submit=Save" http://localhost:$JENKINS_PORT/configSubmit
+#curl -d "_.rawWorkspaceDir=%24%7BITEM_ROOTDIR%7D%2Fworkspace&_.rawBuildsDir=%24%7BITEM_ROOTDIR%7D%2Fbuilds&system_message=&_.numExecutors=2&_.quietPeriod=5&_.scmCheckoutRetryCount=0&namingStrategy=0&stapler-class=jenkins.model.ProjectNamingStrategy%24DefaultProjectNamingStrategy&stapler-class=jenkins.model.ProjectNamingStrategy%24PatternProjectNamingStrategy&_.namePattern=.*&slaveAgentPort.type=random&stapler-class=hudson.markup.RawHtmlMarkupFormatter&stapler-class=hudson.security.LegacySecurityRealm&stapler-class=hudson.security.HudsonPrivateSecurityRealm&privateRealm.allowsSignup=on&stapler-class=hudson.security.LDAPSecurityRealm&ldap.server=&ldap.rootDN=&ldap.userSearchBase=&ldap.userSearch=&ldap.groupSearchBase=&ldap.managerDN=&ldap.managerPassword=&stapler-class=hudson.security.PAMSecurityRealm&_.serviceName=&authorization=0&stapler-class=hudson.security.AuthorizationStrategy%24Unsecured&stapler-class=hudson.security.LegacyAuthorizationStrategy&stapler-class=hudson.security.FullControlOnceLoggedInAuthorizationStrategy&stapler-class=hudson.security.GlobalMatrixAuthorizationStrategy&stapler-class=hudson.security.ProjectMatrixAuthorizationStrategy&stapler-class=hudson.security.csrf.DefaultCrumbIssuer&name=jobConfigHistory&historyRootDir=&maxHistoryEntries=&excludePattern=queue%7CnodeMonitors%7CUpdateCenter%7Cglobal-build-stats&globalMavenOpts=&stapler-class=hudson.maven.local_repo.DefaultLocalRepositoryLocator&stapler-class=hudson.maven.local_repo.PerExecutorLocalRepositoryLocator&stapler-class=hudson.maven.local_repo.PerJobLocalRepositoryLocator&_.usageStatisticsCollected=on&port.type=random&_.cvsExe=&_.cvspassFile=&svn.workspaceFormat=8&svn.global_excluded_revprop=&svn.storeAuthToDisk=on&shell=&_.url=http%3A%2F%2Flocalhost%3A7070%2F&_.smtpServer=&_.defaultSuffix=&_.adminAddress=address+not+configured+yet+%3Cnobody%40nowhere%3E&_.smtpAuthUserName=&_.smtpAuthPassword=&_.smtpPort=&_.replyToAddress=&_.charset=UTF-8&sendTestMailTo=&log-parser.name=TEI+Log+Parse+Rules&log-parser.path=%2Fvar%2Flib%2Fjenkins%2Ftei-log-parse-rules&log-parser.name=&log-parser.path=&core%3Aapply=&json=%7B%22rawWorkspaceDir%22%3A+%22%24%7BITEM_ROOTDIR%7D%2Fworkspace%22%2C+%22rawBuildsDir%22%3A+%22%24%7BITEM_ROOTDIR%7D%2Fbuilds%22%2C+%22system_message%22%3A+%22%22%2C+%22%22%3A+%22%22%2C+%22jenkins-model-MasterBuildConfiguration%22%3A+%7B%22numExecutors%22%3A+%222%22%7D%2C+%22jenkins-model-GlobalQuietPeriodConfiguration%22%3A+%7B%22quietPeriod%22%3A+%225%22%7D%2C+%22jenkins-model-GlobalSCMRetryCountConfiguration%22%3A+%7B%22scmCheckoutRetryCount%22%3A+%220%22%7D%2C+%22jenkins-model-GlobalProjectNamingStrategyConfiguration%22%3A+%7B%7D%2C+%22hudson-security-GlobalSecurityConfiguration%22%3A+%7B%7D%2C+%22hudson-security-csrf-GlobalCrumbIssuerConfiguration%22%3A+%7B%7D%2C+%22jenkins-model-GlobalNodePropertiesConfiguration%22%3A+%7B%22globalNodeProperties%22%3A+%7B%7D%7D%2C+%22jenkins-model-GlobalPluginConfiguration%22%3A+%7B%22plugin%22%3A+%7B%22name%22%3A+%22jobConfigHistory%22%2C+%22historyRootDir%22%3A+%22%22%2C+%22maxHistoryEntries%22%3A+%22%22%2C+%22saveSystemConfiguration%22%3A+false%2C+%22excludePattern%22%3A+%22queue%7CnodeMonitors%7CUpdateCenter%7Cglobal-build-stats%22%2C+%22skipDuplicateHistory%22%3A+false%7D%7D%2C+%22hudson-maven-MavenModuleSet%22%3A+%7B%22globalMavenOpts%22%3A+%22%22%2C+%22%22%3A+%220%22%2C+%22localRepository%22%3A+%7B%22stapler-class%22%3A+%22hudson.maven.local_repo.DefaultLocalRepositoryLocator%22%7D%7D%2C+%22hudson-model-UsageStatistics%22%3A+%7B%22usageStatisticsCollected%22%3A+%7B%7D%7D%2C+%22org-jenkinsci-main-modules-sshd-SSHD%22%3A+%7B%22port%22%3A+%7B%22value%22%3A+%22%22%2C+%22type%22%3A+%22random%22%7D%7D%2C+%22hudson-scm-CVSSCM%22%3A+%7B%22cvsExe%22%3A+%22%22%2C+%22cvspassFile%22%3A+%22%22%2C+%22cvs_noCompression%22%3A+false%7D%2C+%22hudson-scm-SubversionSCM%22%3A+%7B%22workspaceFormat%22%3A+%228%22%2C+%22global_excluded_revprop%22%3A+%22%22%2C+%22storeAuthToDisk%22%3A+%7B%7D%7D%2C+%22hudson-tasks-Shell%22%3A+%7B%22shell%22%3A+%22%22%7D%2C+%22hudson-tasks-Mailer%22%3A+%7B%22url%22%3A+%22http%3A%2F%2Flocalhost%3A7070%2F%22%2C+%22smtpServer%22%3A+%22%22%2C+%22defaultSuffix%22%3A+%22%22%2C+%22adminAddress%22%3A+%22address+not+configured+yet+%3Cnobody%40nowhere%3E%22%2C+%22useSsl%22%3A+false%2C+%22smtpPort%22%3A+%22%22%2C+%22replyToAddress%22%3A+%22%22%2C+%22charset%22%3A+%22UTF-8%22%7D%2C+%22hudson-plugins-logparser-LogParserPublisher%22%3A+%7B%22rule%22%3A+%5B%7B%22name%22%3A+%22TEI+Log+Parse+Rules%22%2C+%22path%22%3A+%22%2Fvar%2Flib%2Fjenkins%2Ftei-log-parse-rules%22%7D%2C+%7B%22name%22%3A+%22%22%2C+%22path%22%3A+%22%22%7D%5D%7D%2C+%22core%3Aapply%22%3A+%22%22%7D&Submit=Save" http://localhost:$JENKINS_PORT/configSubmit
 
 #echo "Waiting to allow Jenkins server to store configuration before restarting the server."
 #sleep 10
