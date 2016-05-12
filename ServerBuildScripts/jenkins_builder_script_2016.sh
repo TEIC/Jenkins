@@ -159,7 +159,8 @@ apt-get -y upgrade
 #SEEKING A SOLUTION.
 echo "Installing required fonts."
 apt-get -y install ttf-dejavu fonts-arphic-ukai fonts-arphic-uming ttf-baekmuk ttf-junicode fonts-linuxlibertine
-apt-get -y ttf-kochi-gothic ttf-kochi-mincho
+#apt-get -y install ttf-kochi-gothic ttf-kochi-mincho
+apt-get -y install fonts-ipafont-gothic fonts-ipafont-mincho
 echo ""
 
 #Now add the repositories we want.
@@ -178,13 +179,14 @@ wget -q -O - http://pkg.jenkins-ci.org/debian/jenkins-ci.org.key | apt-key add -
 echo "deb http://pkg.jenkins-ci.org/debian binary/" > /etc/apt/sources.list.d/jenkins.list
 echo ""
 
+#NOTE: THIS SHOULD REALLY NOT BE NEEDED, BUT THE STYLESHEETS BUILD PROCESS
+#MAKES USE OF OXYGEN TOOLS THAT ARE PACKAGED IN THE TEI REPO AT THE MOMENT.
 #Next TEI. Allow a 5-minute timeout for this one; it's insanely slow.
-#echo "Adding TEI Debian repository. It may take some time
-#to retrieve the key."
-#gpg --keyserver wwwkeys.pgp.net --keyserver-options timeout=300 --recv-keys FEA4973F86A9A497
-#apt-key add ~/.gnupg/pubring.gpg
-#echo "deb http://tei.oucs.ox.ac.uk/teideb/binary ./" > /etc/apt/sources.list.d/tei.list
-#echo ""
+echo "Adding TEI Debian repository. It may take some time to retrieve the key."
+gpg --keyserver wwwkeys.pgp.net --keyserver-options timeout=300 --recv-keys FEA4973F86A9A497
+apt-key add ~/.gnupg/pubring.gpg
+echo "deb http://tei.oucs.ox.ac.uk/teideb/binary ./" > /etc/apt/sources.list.d/tei.list
+echo ""
 
 #Now we can start installing packages.
 echo "Updating for new repositories."
@@ -238,10 +240,11 @@ mkdir Jenkins
 git clone https://github.com/TEIC/Jenkins.git Jenkins
 
 #TEI packages
-#echo "Installing TEI packages."
-#apt-get -y --force-yes install psgml xmlstarlet debiandoc-sgml linuxdoc-tools jing jing-trang-doc libjing-java texlive-xetex &&
-#apt-get -y --force-yes install libtrang-java saxon tei-p5-exemplars tei-roma tei-p5-doc tei-xsl tei-p5-source tei-p5-schema tei-oxygen zip &&
-#echo ""
+#NOTE: THIS SET OF PACKAGES SHOULD SURELY BE TRIMMED. I KNOW WE NEED MOST OF THEM, THOUGH.
+echo "Installing TEI packages."
+apt-get -y --force-yes install psgml xmlstarlet debiandoc-sgml linuxdoc-tools jing jing-trang-doc libjing-java texlive-xetex &&
+apt-get -y --force-yes install libtrang-java saxon tei-p5-exemplars tei-roma tei-p5-doc tei-xsl tei-p5-source tei-p5-schema tei-oxygen zip &&
+echo ""
 
 #NOTE: Do we still need Hannom? What do we have in the Guidelines that uses Vietnamese?
 #Need a LaTeX guru to look at the PDF build process. No harm in doing this for now, though.

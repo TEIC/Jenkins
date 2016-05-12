@@ -7,16 +7,23 @@ and answers we've decided on.
 
 * Do we want to install Apache to make Jenkins available through port 80?
   Answer: no; that's beyond the remit of a basic server setup.
+  
 * Which JDK should we settle on, 7 or 8?
-  Possible answer: JDK 8 appears to be the default on Ubuntu 16.04, so 
+  Answer: JDK 8 appears to be the default on Ubuntu 16.04, so 
   go with that unless some incompatibility emerges.
-* Do we install the TEI packages? All our jobs are supposed to be building 
-  (as far as I know) with the products of other jobs, so in theory they 
-  shouldn't be necessary. I'd like to test this out, and if it's so, then 
-  great, we don't need them. But I have a feeling that something in the 
-  Makefile uses Oxygen .sh files, and I wonder if they're available through 
-  the install of oxygen-tei (meaning the TEI deb version of Oxygen), rather 
-  than in the repo somewhere. Anyone know?
+  
+* Do we install the TEI packages? The answer to that would appear to be YES, 
+  because the Stylesheets Makefile expects Oxygen to be installed in the location
+  where it would be installed by those packages:
+      oxygendoc:
+    	# when building Debian packages, the script runs under
+    	# fakeroot, and the oxygen script then tries to look in /root/.com.oxygenxml, and fails.  
+    	# The answer is to tweak the stylesheetDocumentation.sh script 
+    	@echo text for existence of file $(OXY)/stylesheetDocumentation.sh and make stylesheet documentation if it exists
+    	if test -f $(OXY)/stylesheetDocumentation.sh; then perl -pe "s+-Djava.awt+-Duser.home=/tmp/ -Djava.awt+; s+OXYGEN_HOME=.*+OXYGEN_HOME=/usr/share/oxygen+" < $(OXY)/stylesheetDocumentation.sh > ./runDoc.sh; chmod 755 runDoc.sh;  cp -f $(OXY)/licensekey.txt .;  $(MAKE) ${DOCTARGETS} ${PROFILEDOCTARGETS}; rm -f licensekey.txt runDoc.sh; fi
+    	DECISION: Council meeting 2016-04-25: try commenting out this task in the Makefile to see what breaks.
+    	I'm trying initially with it in place; when things work with it, then we'll start commenting it out.
+    	
 * Do we really need the TEIP5-Test* and TEIP5-Documentation* jobs, or could we just 
   configure the main job to fail earlier?
 
