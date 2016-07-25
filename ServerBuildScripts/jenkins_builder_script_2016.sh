@@ -237,6 +237,11 @@ unzip -d saxon saxonhe.zip
 chmod a+x saxon/saxon*.jar
 cp saxon/saxon*.jar /usr/bin/
 
+## NOTE: Above installs saxon but below saxon is also installed. 
+## Testing on Debian8 the libsaxonb-java package installed saxon 9.1.0.8J 
+## somewhat behind the 9.7 version on sourceforge.  But does this matter? 
+## Should we use packaged version?
+
 #Next we'll grab some stuff from the TEI Jenkins repo on GitHub.
 mkdir Jenkins
 git clone https://github.com/TEIC/Jenkins.git Jenkins
