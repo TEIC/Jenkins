@@ -182,6 +182,7 @@ echo ""
 #NOTE: THIS SHOULD REALLY NOT BE NEEDED, BUT THE STYLESHEETS BUILD PROCESS
 #MAKES USE OF OXYGEN TOOLS THAT ARE PACKAGED IN THE TEI REPO AT THE MOMENT.
 #Next TEI. Allow a 5-minute timeout for this one; it's insanely slow.
+#NOTE -- given this tei.oucs repo no long exists this will have to change, presumably to clone github repo?
 echo "Adding TEI Debian repository. It may take some time to retrieve the key."
 gpg --keyserver wwwkeys.pgp.net --keyserver-options timeout=300 --recv-keys FEA4973F86A9A497
 apt-key add ~/.gnupg/pubring.gpg
