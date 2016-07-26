@@ -95,6 +95,8 @@ fi
 echo ""
 #Check for existence of an Oxygen licence key file in /usr/share/oxygen
 
+## Do I actually need *oxygen* installed, or just an oxygen license? Presumably oxygen, 
+## but the only place that this script installs it is from the teideb repo that no longer exists?? -JC
 if [ -f $OxyLicense ];
 then echo "Oxygen license is in the right place."
 else
@@ -240,8 +242,8 @@ cp saxon/saxon*.jar /usr/bin/
 ## NOTE: Above installs saxon but below saxon is also installed. 
 ## Testing on Debian8 the libsaxonb-java package installed saxon 9.1.0.8J 
 ## somewhat behind the 9.7 version on sourceforge.  But does this matter? 
-## Should we use packaged version? -JC  (Note: what I've done is add a 
-## symlink from /usr/bin/saxon to /usr/bin/saxonb-xslt)
+## Should we use packaged version?   (Note: what I've done is add a 
+## symlink from /usr/bin/saxon to /usr/bin/saxonb-xslt) -JC
 
 #Next we'll grab some stuff from the TEI Jenkins repo on GitHub.
 mkdir Jenkins
