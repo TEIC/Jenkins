@@ -240,7 +240,8 @@ cp saxon/saxon*.jar /usr/bin/
 ## NOTE: Above installs saxon but below saxon is also installed. 
 ## Testing on Debian8 the libsaxonb-java package installed saxon 9.1.0.8J 
 ## somewhat behind the 9.7 version on sourceforge.  But does this matter? 
-## Should we use packaged version?
+## Should we use packaged version? -JC  (Note: what I've done is add a 
+## symlink from /usr/bin/saxon to /usr/bin/saxonb-xslt)
 
 #Next we'll grab some stuff from the TEI Jenkins repo on GitHub.
 mkdir Jenkins
@@ -288,6 +289,7 @@ script again. Otherwise, press return to continue."
 echo "Downloading and building rnv (the RelaxNG validator) from SourceForge."
 echo "First we need libexpat-dev, on which it depends."
 apt-get -y install libexpat-dev
+## NOTE: In Debian8 this is libexpat1-dev Though I installed libexpat1 as well. -JC
 echo ""
 echo "Now we download rnv, build and install it."
 #This seems to be fragile. Let's catch it in case it fails. Lots of apparently good URLs fail when
@@ -338,7 +340,7 @@ git clone https://github.com/dtolpin/RNV.git rnv
 cd rnv
 make -f Makefile.gnu
 cp rnv /usr/bin/
-
+## You may wish to cd back up here. "cd .." since you've gone into rnv  -JC
 echo ""
 
 #Jenkins
@@ -350,6 +352,7 @@ echo "Replacing default port and waiting for Jenkins to restart …"
 /etc/init.d/jenkins stop
 sleep 20
 # replace the default port
+## But the default port (on debian at least) is 8080 which is what we want?
 sed -i "s/HTTP_PORT=.*$/HTTP_PORT=$JENKINS_PORT/" /etc/default/jenkins 
 
 # start Jenkins
@@ -395,8 +398,10 @@ exit
 #NOTE: Paths and filenames below are wrong; need to fix.
 echo "Starting configuration of Jenkins."
 cd /var/lib/jenkins
+## This needs to be $currDir/Jenkins/LogParseRules/tei-log-parse-rules ?  -JC
 cp ${currDir}/tei-log-parse-rules ./
 chown jenkins tei-log-parse-rules
+## Couldn't find these? Do I need them??!! -JC
 cp ${currDir}/hudson.plugins.logparser.LogParserPublisher.xml ./
 chown jenkins hudson.plugins.logparser.LogParserPublisher.xml
 cp ${currDir}/jenkins.advancedqueue.PriorityConfiguration.xml ./
@@ -404,6 +409,7 @@ chown jenkins jenkins.advancedqueue.PriorityConfiguration.xml
 echo ""
 
 echo "Getting all the job data from TEI."
+## Again, needs /Jenkins/  
 cp -R ${currDir}/jobs ./
 chown -R jenkins jobs
 echo ""
@@ -455,6 +461,7 @@ echo ""
 
 echo "Downloading various configuration files for Jenkins."
 cd /var/lib/jenkins
+## NONE of these seem to be in the repository. Where do I get them from??!  -JC (stopping here)
 cp ${currDir}/jenkins_job_config.xsl ./
 chown jenkins jenkins_job_config.xsl
 cp ${currDir}/jenkins_main_config.xsl ./
