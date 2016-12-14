@@ -59,4 +59,9 @@ error /validity error/
 error /Exiting with failure status/
 info /INFO/
 ok /BUILD SUCCESSFUL/
+#Bits added for docker instance, where configuration is a bit different.
+ok /dpkg-buildpackage: warning: using a gain-root-command while being root/
+ok /dpkg-gencontrol: warning: File::FcntlLock not available; using flock which is not NFS-safe/
+#End of bits added for docker.
+od /
 start /BUILD/

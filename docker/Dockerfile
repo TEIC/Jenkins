@@ -45,6 +45,8 @@ RUN ls /usr/bin/rnv
 # because we're working with Debian Jessie instead of Ubuntu.
 # Commented-out packages are those reported by the build process
 # as being already installed, presumably by upstream images. 
+# Various tex-related packages have been added as build failures
+# revealed the need for them.
 RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install ant \ 
      debhelper \ 
      debiandoc-sgml \ 
@@ -52,33 +54,32 @@ RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install 
      fakeroot \
      fonts-arphic-ukai \ 
      fonts-arphic-uming \ 
-#     fonts-dejavu-core \ 
-#     fonts-dejavu-extra \ 
      fonts-ipafont-gothic \ 
      fonts-ipafont-mincho \
      fonts-linuxlibertine \ 
-#     git \ 
      jing \ 
+     libfile-fcntllock-perl \ 
      libjing-java \ 
      libsaxon-java \ 
      libsaxonhe-java \ 
      libtrang-java \ 
-#     libxml2 \ 
      libxml2-utils \ 
      linkchecker \ 
      linuxdoc-tools \ 
+     lmodern \
      maven \ 
      openssh-server \ 
      psgml \ 
      texlive-fonts-recommended \ 
+     texlive-generic-recommended \ 
      texlive-latex-extra \ 
      texlive-xetex \ 
      trang \ 
      ttf-baekmuk \ 
      ttf-dejavu \ 
      ttf-junicode \ 
-#     unzip \ 
-#     wget \ 
+     ttf-kochi-gothic \ 
+     ttf-kochi-mincho \
      xmlstarlet \ 
      xsltproc \ 
      zip
