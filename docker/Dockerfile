@@ -81,6 +81,15 @@ RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install 
      xsltproc \ 
      zip
 
+# Now we have to get the one troublesome font that's not in any repo.
+RUN mkdir /usr/share/fonts/truetype/hannom && \
+    cd /usr/share/fonts/truetype/hannom && \
+    wget -O hannom.zip http://downloads.sourceforge.net/project/vietunicode/hannom/hannom%20v2005/hannomH.zip && \
+    unzip hannom.zip && \
+    find . -iname "*.ttf" | rename 's/\ /_/g' && \
+    rm hannom.zip && \
+    fc-cache -f -v
+
 # NOTE: NOT DOING THIS because of permissions issues;
 # we'll chown stuff instead.
 # We switch back to the jenkins user to install Jenkins plugins and
@@ -95,23 +104,14 @@ RUN git clone https://github.com/TEIC/Jenkins.git Jenkins
 RUN git config --global user.email $JENKINS_USER_EMAIL
 RUN git config --global user.name $JENKINS_USER_NAME
 
+# Put the log parser rules in place.
+RUN cp Jenkins/LogParseRules/tei-log-parse-rules /var/jenkins_home/tei-log-parse-rules
+
 # Now we try installing Jenkins plugins.
-RUN mkdir /var/jenkins_home/plugins && \
-    cd /var/jenkins_home/plugins && \ 
-    wget --no-check-certificate https://updates.jenkins-ci.org/latest/copyartifact.hpi && \ 
-    wget --no-check-certificate https://updates.jenkins-ci.org/latest/emotional-jenkins-plugin.hpi && \ 
-    wget --no-check-certificate https://updates.jenkins-ci.org/latest/greenballs.hpi && \ 
-    wget --no-check-certificate https://updates.jenkins-ci.org/latest/jobConfigHistory.hpi && \  
-    wget --no-check-certificate https://updates.jenkins-ci.org/latest/plot.hpi && \ 
-    wget --no-check-certificate https://updates.jenkins-ci.org/latest/log-parser.hpi && \ 
-    wget --no-check-certificate https://updates.jenkins-ci.org/latest/scp.hpi && \ 
-    wget --no-check-certificate https://updates.jenkins-ci.org/latest/PrioritySorter.hpi && \ 
-    wget --no-check-certificate https://updates.jenkins-ci.org/latest/scm-api.hpi && \ 
-    wget --no-check-certificate https://updates.jenkins-ci.org/latest/git.hpi && \ 
-    wget --no-check-certificate https://updates.jenkins-ci.org/latest/git-client.hpi && \ 
-    wget --no-check-certificate https://updates.jenkins-ci.org/latest/github.hpi && \ 
-    wget --no-check-certificate https://updates.jenkins-ci.org/latest/github-api.hpi && \ 
-    chown -R jenkins .
+# Recommended approach from hub.docker.com jenkins page:
+# provide a file listing all the plugins you want to install.
+COPY plugins.txt /usr/share/jenkins/plugins.txt
+RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
     
 
 
