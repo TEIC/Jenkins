@@ -15,6 +15,10 @@ ok /Downloading: http://repo1.maven.org/maven2/org/apache/maven/maven-error-diag
 ok /Tests run: 0, Failures: 0, Errors: 0, Skipped: 0/
 ok /[WARNING] While downloading jdom:jdom:1.1/
 #End of OxGarage first-time-build rules added by MDH.
+#Bits added by MDH for docker instance, where configuration is a bit different.
+ok /dpkg-buildpackage: warning: using a gain-root-command while being root/
+ok /dpkg-gencontrol: warning: File::FcntlLock not available; using flock which is not NFS-safe/
+#End of bits added for docker by MDH.
 ok /dpkg-genchanges: warning: duplicate files list entry/
 ok /script-ignores-errors/
 ok /dpkg-source: warning: source directory/
@@ -59,9 +63,4 @@ error /validity error/
 error /Exiting with failure status/
 info /INFO/
 ok /BUILD SUCCESSFUL/
-#Bits added for docker instance, where configuration is a bit different.
-ok /dpkg-buildpackage: warning: using a gain-root-command while being root/
-ok /dpkg-gencontrol: warning: File::FcntlLock not available; using flock which is not NFS-safe/
-#End of bits added for docker.
-od /
 start /BUILD/
