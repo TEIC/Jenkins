@@ -1,5 +1,7 @@
 ####DOCKER FILE FOR IMAGE OF TEI JENKINS SERVER####
 
+# Written by Martin Holmes, December 2016. #
+
 # We start from the latest Jenkins, which is based on
 # openjdk:jdk-8, which is based ultimately on debian 
 # jessie.
@@ -13,11 +15,10 @@
 
 # docker run --name teijenkins -p 8080:8080 -p 50000:50000 -v /var/jenkins_home jenkins
 
-FROM jenkins:latest
+# My own version for the record:
+# docker run --name teijenkins -p 8080:8080 -p 50000:50000 -v /home/mholmes/WorkData/tei/jenkins_home:/var/jenkins_home jenkins
 
-# Variables we'll use later on.
-ARG JENKINS_USER_NAME="TEI Council"
-ARG JENKINS_USER_EMAIL="tei-council@lists.tei-c.org"
+FROM jenkins:latest
 
 # Need to switch to root user to install stuff.
 USER root
@@ -36,15 +37,11 @@ RUN mkdir rnv && \
     make -f Makefile.gnu rnv && \
     cp rnv /usr/bin/ && \
     cd ../
-    
-# Temporary: confirm rnv is there.
-RUN ls /usr/bin/rnv
 
 # Install a bunch of packages we need. This package list has been 
 # customized a little from the original 2016 builder script set,
 # because we're working with Debian Jessie instead of Ubuntu.
-# Commented-out packages are those reported by the build process
-# as being already installed, presumably by upstream images. 
+# Many required packages are already installed upstream. 
 # Various tex-related packages have been added as build failures
 # revealed the need for them.
 RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install ant \ 
@@ -93,19 +90,9 @@ RUN mkdir /usr/share/fonts/truetype/hannom && \
     rm hannom.zip && \
     fc-cache -f -v
 
-# NOTE: NOT DOING THIS because of permissions issues;
-# we'll chown stuff instead.
-# We switch back to the jenkins user to install Jenkins plugins and
-# configure jobs.
-# USER jenkins
-
 # Next we'll grab some stuff from the TEI Jenkins repo on GitHub.
 RUN mkdir Jenkins
 RUN git clone https://github.com/TEIC/Jenkins.git Jenkins
-
-# Configure settings for git
-RUN git config --global user.email $JENKINS_USER_EMAIL
-RUN git config --global user.name $JENKINS_USER_NAME
 
 # Now we try installing Jenkins plugins.
 # Recommended approach from hub.docker.com jenkins page:
@@ -119,3 +106,4 @@ COPY tei-log-parse-rules /var/jenkins_home/tei-log-parse-rules
 # Copy the jobs into place.
 COPY jobs/ /var/jenkins_home/jobs/
 
+# That should be it.
