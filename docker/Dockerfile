@@ -44,10 +44,12 @@ RUN ls /usr/bin/rnv
 # customized a little from the original 2016 builder script set,
 # because we're working with Debian Jessie instead of Ubuntu.
 # Commented-out packages are those reported by the build process
-# as being already installed, presumably by upstream images.
-RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install debhelper \ 
+# as being already installed, presumably by upstream images. 
+RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install ant \ 
+     debhelper \ 
      debiandoc-sgml \ 
      devscripts \ 
+     fakeroot \
      fonts-arphic-ukai \ 
      fonts-arphic-uming \ 
 #     fonts-dejavu-core \ 
@@ -104,14 +106,15 @@ RUN git clone https://github.com/TEIC/Jenkins.git Jenkins
 RUN git config --global user.email $JENKINS_USER_EMAIL
 RUN git config --global user.name $JENKINS_USER_NAME
 
-# Put the log parser rules in place.
-RUN cp Jenkins/LogParseRules/tei-log-parse-rules /var/jenkins_home/tei-log-parse-rules
-
 # Now we try installing Jenkins plugins.
 # Recommended approach from hub.docker.com jenkins page:
 # provide a file listing all the plugins you want to install.
 COPY plugins.txt /usr/share/jenkins/plugins.txt
 RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
     
+# Put the log parser rules in place.
+COPY tei-log-parse-rules /var/jenkins_home/tei-log-parse-rules
 
+# Copy the jobs into place.
+COPY jobs/ /var/jenkins_home/jobs/
 
