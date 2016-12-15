@@ -18,6 +18,10 @@
 # My own version for the record:
 # docker run --name teijenkins -p 8080:8080 -p 50000:50000 -v /home/mholmes/WorkData/tei/jenkins_home:/var/jenkins_home jenkins
 
+# IMPORTANT NOTE: If you run this container, the VERY FIRST thing you should do is to 
+#                 configure security in Jenkins. Out of the box, it allows anyone 
+#                 to run any job without any login. DO NOT FORGET TO DO THIS.
+
 FROM jenkins:latest
  
 # Variables we'll use later on.
