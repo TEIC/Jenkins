@@ -9,12 +9,10 @@ and answers we've decided on.
   Answer: no; that's beyond the remit of a basic server setup.
   
 * Which JDK should we settle on, 7 or 8?
-  Answer: JDK 8 appears to be the default on Ubuntu 16.04, so 
-  go with that unless some incompatibility emerges.
+  Answer: JDK 8 appears to be the default on Ubuntu 16.04 and Debian Jessie, so that's what we're using.
   
-* Do we install the TEI packages? The answer to that would appear to be YES, 
-  because the Stylesheets Makefile expects Oxygen to be installed in the location
-  where it would be installed by those packages:
+* Do we install the TEI packages? 
+  Answer: In the docker container, we don't; nor do we install the Oxygen components. I believe the dependence on Oxygen should be removed, and there   is a ticket to that effect on the repo. However, in the full-server setup, if it's attempting to parallel our own build servers, it should currently be installed because the Stylesheets Makefile expects Oxygen to be installed in the location where it would be installed by those packages:
       oxygendoc:
     	# when building Debian packages, the script runs under
     	# fakeroot, and the oxygen script then tries to look in /root/.com.oxygenxml, and fails.  
@@ -24,8 +22,7 @@ and answers we've decided on.
     	DECISION: Council meeting 2016-04-25: try commenting out this task in the Makefile to see what breaks.
     	I'm trying initially with it in place; when things work with it, then we'll start commenting it out.
     	
-* Do we really need the TEIP5-Test* and TEIP5-Documentation* jobs, or could we just 
-  configure the main job to fail earlier?
+* Do we really need the TEIP5-Test* and TEIP5-Documentation* jobs, or could we just configure the main job to fail earlier?
 
 ## Jenkins job configuration
 
