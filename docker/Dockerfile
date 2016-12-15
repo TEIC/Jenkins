@@ -19,6 +19,10 @@
 # docker run --name teijenkins -p 8080:8080 -p 50000:50000 -v /home/mholmes/WorkData/tei/jenkins_home:/var/jenkins_home jenkins
 
 FROM jenkins:latest
+ 
+# Variables we'll use later on.
+ARG JENKINS_USER_NAME="TEI Council"
+ARG JENKINS_USER_EMAIL="tei-council@lists.tei-c.org"
 
 # Need to switch to root user to install stuff.
 USER root
@@ -93,6 +97,10 @@ RUN mkdir /usr/share/fonts/truetype/hannom && \
 # Next we'll grab some stuff from the TEI Jenkins repo on GitHub.
 RUN mkdir Jenkins
 RUN git clone https://github.com/TEIC/Jenkins.git Jenkins
+
+# Configure settings for git
+RUN git config --global user.email $JENKINS_USER_EMAIL
+RUN git config --global user.name $JENKINS_USER_NAME
 
 # Now we try installing Jenkins plugins.
 # Recommended approach from hub.docker.com jenkins page:
