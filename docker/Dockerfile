@@ -39,8 +39,7 @@ USER root
 RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install apt-utils
 RUN apt-get --yes --force-yes --no-install-recommends install make build-essential libexpat-dev
 
-RUN mkdir rnv && \
-    git clone https://github.com/dtolpin/RNV.git rnv && \ 
+RUN git clone https://github.com/dtolpin/RNV.git rnv && \ 
     cd rnv && \ 
     make -f Makefile.gnu rnv && \
     cp rnv /usr/bin/ && \
