@@ -59,7 +59,7 @@
       <unstableOnWarning>true</unstableOnWarning>
       <failBuildOnError>false</failBuildOnError>
       <showGraphs>false</showGraphs>
-      <parsingRulesPath>/var/lib/jenkins/tei-log-parse-rules</parsingRulesPath>
+      <parsingRulesPath>/var/jenkins_home/tei-log-parse-rules</parsingRulesPath>
       <useProjectRule>false</useProjectRule>
     </hudson.plugins.logparser.LogParserPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.17">

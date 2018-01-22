@@ -53,7 +53,7 @@ exit</command>
       <unstableOnWarning>false</unstableOnWarning>
       <failBuildOnError>true</failBuildOnError>
       <showGraphs>false</showGraphs>
-      <parsingRulesPath>/var/lib/jenkins/tei-log-parse-rules</parsingRulesPath>
+      <parsingRulesPath>/var/jenkins_home/tei-log-parse-rules</parsingRulesPath>
       <useProjectRule>false</useProjectRule>
     </hudson.plugins.logparser.LogParserPublisher>
   </publishers>

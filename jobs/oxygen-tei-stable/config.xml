@@ -54,7 +54,7 @@ ant stable</command>
     <hudson.plugins.logparser.LogParserPublisher plugin="log-parser@1.0.8">
       <unstableOnWarning>false</unstableOnWarning>
       <failBuildOnError>true</failBuildOnError>
-      <parsingRulesPath>/var/lib/jenkins/hudson-log-parse-rules</parsingRulesPath>
+      <parsingRulesPath>/var/jenkins_home/tei-log-parse-rules</parsingRulesPath>
     </hudson.plugins.logparser.LogParserPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.15">
       <recipients>mholmes@uvic.ca james.cummings@it.ox.ac.uk tei-council@lists.tei-c.org</recipients>
