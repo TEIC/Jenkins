@@ -63,7 +63,7 @@
       <useProjectRule>false</useProjectRule>
     </hudson.plugins.logparser.LogParserPublisher>
     <hudson.tasks.Mailer plugin="mailer@1.17">
-      <recipients>mholmes@uvic.ca james.cummings@it.ox.ac.uk tei-council@lists.tei-c.org</recipients>
+      <recipients>mholmes@uvic.ca tei-council@lists.tei-c.org</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>true</sendToIndividuals>
     </hudson.tasks.Mailer>
