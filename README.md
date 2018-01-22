@@ -31,5 +31,16 @@ Click "Reload Configuration from Disk" for the changes to take effect.
 Once you're set up, remember to backup/keep your data directory `/your/jenkins_home` 
 so whenever you start a new container, it will inherit the job data and configuration.  
 
+## Content Security Policy (CSP)
+
+Jenkins 1.641 / Jenkins 1.625.3 introduced the [Content-Security-Policy](https://wiki.jenkins.io/display/JENKINS/Configuring+Content+Security+Policy) header to static files served by Jenkins.
+Hence, the TEI Guidelines will display some artifacts (e.g. bibliography tooltips) when viewed from Jenkins. 
+The CSP can be relaxed by passing the appropriate Java options to the Jenkins startup script, e.g.
+
+```
+docker run --env JAVA_OPTS="-Dhudson.model.DirectoryBrowserSupport.CSP='default-src self; img-src *'" …
+```
+
+
 ## Limitations
 We do not install kindlegen for creating the .mobi version of the Guidelines, since this is non-free; and we do not do the minimal install of Oxygen which is required to build the Stylesheets documentation, since this requires a license. If either of these requirements is installed into the docker container, these build processes will begin working automatically. 
