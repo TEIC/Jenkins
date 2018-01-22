@@ -2,9 +2,9 @@
 
 # Written by Martin Holmes, December 2016. #
 
-# We start from the latest Jenkins, which is based on
-# openjdk:jdk-8, which is based ultimately on debian 
-# jessie.
+# We start from the Jenkins lts version, which is based on
+# openjdk:8-jdk, which is based ultimately on debian 
+# stretch.
 
 # As the Jenkins page says, the image should be started like
 # this: 
@@ -22,7 +22,8 @@
 #                 configure security in Jenkins. Out of the box, it allows anyone 
 #                 to run any job without any login. DO NOT FORGET TO DO THIS.
 
-FROM jenkins:latest
+FROM jenkins/jenkins:lts
+LABEL maintainer="Martin Holmes and Peter Stadler for the TEI Council"
  
 # Variables we'll use later on.
 ARG JENKINS_USER_NAME="TEI Council"
@@ -33,17 +34,16 @@ USER root
 
 # We need to build rnv locally since it's no longer packaged for
 # Debian. Doing this before installing other stuff because it's
-# quicker for testing purposes. We need make for that. Do apt-utils
-# first so that it's available when other stuff is being installed.
+# quicker for testing purposes. We need make for that and 
 # libexpat-dev is required to build rnv.
-RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install apt-utils
-RUN apt-get --yes --force-yes --no-install-recommends install make build-essential libexpat-dev
+RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install make build-essential libexpat-dev
 
 RUN git clone https://github.com/dtolpin/RNV.git rnv && \ 
     cd rnv && \ 
     make -f Makefile.gnu rnv && \
     cp rnv /usr/bin/ && \
-    cd ../
+    cd .. && \
+    rm -Rf rnv
 
 # Install a bunch of packages we need. This package list has been 
 # customized a little from the original 2016 builder script set,
@@ -72,6 +72,7 @@ RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install 
      linuxdoc-tools \ 
      lmodern \
      maven \ 
+     # do we really need this openssh-server?
      openssh-server \ 
      psgml \ 
      texlive-fonts-recommended \ 
@@ -82,8 +83,9 @@ RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install 
      ttf-baekmuk \ 
      ttf-dejavu \ 
      ttf-junicode \ 
-     ttf-kochi-gothic \ 
-     ttf-kochi-mincho \
+     # fonts are replaced by fonts-ipafont-gothic fonts-ipafont-mincho (see https://packages.debian.org/wheezy/ttf-kochi-gothic) 
+     #ttf-kochi-gothic \ 
+     #ttf-kochi-mincho \
      xmlstarlet \ 
      xsltproc \ 
      zip
@@ -97,24 +99,46 @@ RUN mkdir /usr/share/fonts/truetype/hannom && \
     rm hannom.zip && \
     fc-cache -f -v
 
-# Next we'll grab some stuff from the TEI Jenkins repo on GitHub.
-RUN mkdir Jenkins
-RUN git clone https://github.com/TEIC/Jenkins.git Jenkins
+# running as user jenkins for installing plugins,
+# and finally starting the service
+USER jenkins:jenkins
+WORKDIR ${JENKINS_HOME}
+RUN /usr/local/bin/install-plugins.sh \
+    junit \
+    script-security \
+    matrix-project \
+    structs \
+    ssh-credentials \
+    workflow-scm-step \
+    workflow-step-api \
+    maven-plugin \
+    javadoc \
+    display-url-api \
+    mailer \
+    plain-credentials \
+    token-macro \
+    credentials \
+    git \
+    git-client \
+    copyartifact \
+    emotional-jenkins-plugin \
+    greenballs \
+    jobConfigHistory \
+    plot \
+    log-parser \
+    # disabled scp plugin due to "Insecure credential storage and transmission" warning
+    #scp \
+    PrioritySorter \
+    scm-api \
+    github \
+    github-api
 
 # Configure settings for git
-RUN git config --global user.email $JENKINS_USER_EMAIL
-RUN git config --global user.name $JENKINS_USER_NAME
-
-# Now we try installing Jenkins plugins.
-# Recommended approach from hub.docker.com jenkins page:
-# provide a file listing all the plugins you want to install.
-COPY plugins.txt /usr/share/jenkins/plugins.txt
-RUN /usr/local/bin/plugins.sh /usr/share/jenkins/plugins.txt
-    
-# Put the log parser rules in place.
-COPY tei-log-parse-rules /var/jenkins_home/tei-log-parse-rules
-
-# Copy the jobs into place.
-COPY jobs/ /var/jenkins_home/jobs/
+# and save it for reuse
+# because ${JENKINS_HOME} is declared as a volume
+# and its content won't survive 
+RUN git config --global user.email ${JENKINS_USER_EMAIL} \
+    && git config --global user.name ${JENKINS_USER_NAME} \
+    && cp .gitconfig /usr/share/jenkins/ref/
 
 # That should be it.
