@@ -43,7 +43,7 @@
   <builders>
     <hudson.tasks.Shell>
       <command>cd oxygen-tei
-ant bleeding</command>
+        ant bleeding -Dp5JenkinsBuild=${JENKINS_HOME}/jobs/TEIP5-dev/lastSuccessful/archive/P5/ -DstylesheetsJenkinsBuild=${JENKINS_HOME}/jobs/Stylesheets-dev/lastSuccessful/archive/</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
