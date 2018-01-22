@@ -37,10 +37,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>svn update</command>
-    </hudson.tasks.Shell>
-    <hudson.tasks.Shell>
-      <command>cd P5 &amp;&amp; make VCS=git INJENKINS=true XSL=`pwd`/../../../Stylesheets-release-7.41.0/lastSuccessful/archive/dist/xml/tei/stylesheet clean html-web epub3 Guidelines.pdf</command>
+      <command>cd P5 &amp;&amp; make VCS=git INJENKINS=true XSL=${JENKINS_HOME}/jobs/Stylesheets-release-7.41.0/lastSuccessful/archive/dist/xml/tei/stylesheet clean html-web epub3 Guidelines.pdf</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
