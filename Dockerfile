@@ -133,12 +133,19 @@ RUN /usr/local/bin/install-plugins.sh \
     github \
     github-api
 
+# copy the initial job configuration and log parse rules to /tmp
+# for convenience, we tar it and copy it to /usr/share/jenkins/ref/
+# in the next step, so it will be added the ${JENKINS_HOME} directory automatically
+COPY jobs /tmp/jobs
+COPY tei-log-parse-rules /tmp/tei-log-parse-rules
+
 # Configure settings for git
 # and save it for reuse
 # because ${JENKINS_HOME} is declared as a volume
 # and its content won't survive 
 RUN git config --global user.email ${JENKINS_USER_EMAIL} \
     && git config --global user.name ${JENKINS_USER_NAME} \
-    && cp .gitconfig /usr/share/jenkins/ref/
+    && cp .gitconfig /usr/share/jenkins/ref/ \
+    && tar cfz /usr/share/jenkins/ref/jobs.tar.gz -C /tmp/ jobs tei-log-parse-rules
 
 # That should be it.

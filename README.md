@@ -25,7 +25,8 @@ Once you have access to the (still bare) Jenkins, you should go to the Jenkins a
     and enter some appropriate description (e.g. "TEI log parse rules"). 
 2. set/check the proper Jenkins URL 
 
-Finally, copy the `jobs` directory to your `jenkins_home`, replacing the empty default directory. 
+Finally, we need to populate the `jobs` directory within `jenkins_home` and add the `tei-log-parse-rules` file;
+these are available from a tar archive at `jenkins_home`, so you simply need to issue `tar xfz jobs.tar.gz` within this directory to put everything in place.
 Click "Reload Configuration from Disk" for the changes to take effect.
 
 Once you're set up, remember to backup/keep your data directory `/your/jenkins_home` 
