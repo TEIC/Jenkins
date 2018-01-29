@@ -22,7 +22,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>*/release-7.41.0</name>
+        <name>*/release-7.44.0</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -57,7 +57,7 @@
       <caseSensitive>true</caseSensitive>
     </hudson.tasks.ArtifactArchiver>
     <hudson.tasks.BuildTrigger>
-      <childProjects>TEIP5-Test-release-3.0.0</childProjects>
+      <childProjects>TEIP5-Test-release-3.3.0</childProjects>
       <threshold>
         <name>SUCCESS</name>
         <ordinal>0</ordinal>

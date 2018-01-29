@@ -1,13 +1,13 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <project>
   <actions/>
-  <description>Build schemas and dtds, validate source and examples, run tests</description>
+  <description>Build HTML and PDF of Guidelines to check for side effects</description>
   <keepDependencies>false</keepDependencies>
   <properties>
     <jenkins.model.BuildDiscarderProperty>
       <strategy class="hudson.tasks.LogRotator">
         <daysToKeep>-1</daysToKeep>
-        <numToKeep>5</numToKeep>
+        <numToKeep>2</numToKeep>
         <artifactDaysToKeep>-1</artifactDaysToKeep>
         <artifactNumToKeep>-1</artifactNumToKeep>
       </strategy>
@@ -22,7 +22,7 @@
     </userRemoteConfigs>
     <branches>
       <hudson.plugins.git.BranchSpec>
-        <name>*/release-3.0.0</name>
+        <name>*/release-3.3.0</name>
       </hudson.plugins.git.BranchSpec>
     </branches>
     <doGenerateSubmoduleConfigurations>false</doGenerateSubmoduleConfigurations>
@@ -31,42 +31,37 @@
   </scm>
   <canRoam>true</canRoam>
   <disabled>true</disabled>
-  <blockBuildWhenDownstreamBuilding>false</blockBuildWhenDownstreamBuilding>
+  <blockBuildWhenDownstreamBuilding>true</blockBuildWhenDownstreamBuilding>
   <blockBuildWhenUpstreamBuilding>false</blockBuildWhenUpstreamBuilding>
-  <triggers>
-    <hudson.triggers.SCMTrigger>
-      <spec>*/5 * * * * </spec>
-      <ignorePostCommitHooks>false</ignorePostCommitHooks>
-    </hudson.triggers.SCMTrigger>
-  </triggers>
+  <triggers/>
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cd P5 &amp;&amp; make VCS=git INJENKINS=true XSL=${JENKINS_HOME}/jobs/Stylesheets-release-7.41.0/lastSuccessful/archive/dist/xml/tei/stylesheet clean validate test</command>
+      <command>cd P5 &amp;&amp; make VCS=git INJENKINS=true XSL=${JENKINS_HOME}/jobs/Stylesheets-release-7.44.0/lastSuccessful/archive/dist/xml/tei/stylesheet clean html-web epub3 Guidelines.pdf</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
-    <hudson.tasks.BuildTrigger>
-      <childProjects>TEIP5-Documentation-release-3.0.0</childProjects>
-      <threshold>
-        <name>UNSTABLE</name>
-        <ordinal>1</ordinal>
-        <color>YELLOW</color>
-        <completeBuild>true</completeBuild>
-      </threshold>
-    </hudson.tasks.BuildTrigger>
     <hudson.plugins.logparser.LogParserPublisher plugin="log-parser@2.0">
-      <unstableOnWarning>true</unstableOnWarning>
-      <failBuildOnError>false</failBuildOnError>
+      <unstableOnWarning>false</unstableOnWarning>
+      <failBuildOnError>true</failBuildOnError>
       <showGraphs>false</showGraphs>
       <parsingRulesPath>/var/jenkins_home/tei-log-parse-rules</parsingRulesPath>
       <useProjectRule>false</useProjectRule>
     </hudson.plugins.logparser.LogParserPublisher>
-    <hudson.tasks.Mailer plugin="mailer@1.17">
+    <hudson.tasks.Mailer plugin="mailer@1.16">
       <recipients>mholmes@uvic.ca tei-council@lists.tei-c.org</recipients>
       <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
       <sendToIndividuals>true</sendToIndividuals>
     </hudson.tasks.Mailer>
+    <hudson.tasks.BuildTrigger>
+      <childProjects>TEIP5-release-3.3.0</childProjects>
+      <threshold>
+        <name>SUCCESS</name>
+        <ordinal>0</ordinal>
+        <color>BLUE</color>
+        <completeBuild>true</completeBuild>
+      </threshold>
+    </hudson.tasks.BuildTrigger>
   </publishers>
   <buildWrappers/>
 </project>
