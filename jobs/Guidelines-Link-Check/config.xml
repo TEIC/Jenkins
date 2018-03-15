@@ -26,7 +26,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>VERSIONFILE=$JENKINS_HOME/jobs/TEIP5-dev/workspace/P5/VERSION
+      <command>VERSIONFILE=$JENKINS_HOME/workspace/TEIP5-dev/P5/VERSION
 VERSION=`cat ${VERSIONFILE}` 
 TARGET=$JENKINS_HOME/jobs/TEIP5-dev/lastSuccessful/archive/P5/release/doc/tei-p5-doc/en/html/index.html
 
