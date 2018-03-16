@@ -32,18 +32,16 @@ TARGET=$JENKINS_HOME/jobs/TEIP5-dev/lastSuccessful/archive/P5/release/doc/tei-p5
 
 
 echo &quot;Running link checking for P5 version $VERSION.&quot;
-
-if [[ $VERSION =~ [a-z]+$ ]]; then
-	echo &quot;Using configuration for pre-release version.&quot;
-	linkchecker --config=$JENKINS_HOME/jobs/Guidelines-Link-Check/linkcheckerrcalphabeta $TARGET
-	
-else
-	echo &quot;Using configuration for release version.&quot;
-	linkchecker --config=$JENKINS_HOME/jobs/Guidelines-Link-Check/linkcheckerrcrelease $TARGET
-fi
-
+        
+case &quot;$VERSION&quot; in
+*[a-z])  echo &quot;Using configuration for pre-release version.&quot;;
+  linkchecker --config=$JENKINS_HOME/jobs/Guidelines-Link-Check/linkcheckerrcalphabeta $TARGET ;;
+*) echo &quot;Using configuration for release version.&quot;;
+  linkchecker --config=$JENKINS_HOME/jobs/Guidelines-Link-Check/linkcheckerrcrelease $TARGET ;;
+esac
+        
 echo &quot;Transforming checker report...&quot;
-saxon -s:checkResults/linkchecker-out.xml -xsl:$JENKINS_HOME/jobs/Guidelines-Link-Check/linkchecker.xsl
+saxon -s:$JENKINS_HOME/workspace/Guidelines-Link-Check/checkResults/linkchecker-out.xml -xsl:$JENKINS_HOME/jobs/Guidelines-Link-Check/linkchecker.xsl
 echo &quot;Done!&quot;
 exit</command>
     </hudson.tasks.Shell>
