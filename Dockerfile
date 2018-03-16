@@ -93,7 +93,7 @@ RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install 
 # create a simple shell wrapper script for the 
 # saxon.jar provided by the Debian libsaxonhe-java package 
 RUN echo "#! /bin/bash" > /usr/local/bin/saxon \
-    && echo "java -jar /usr/share/java/Saxon-HE.jar $*" >> /usr/local/bin/saxon \
+    && echo "java -jar /usr/share/java/Saxon-HE.jar \$*" >> /usr/local/bin/saxon \
     && chmod 755 /usr/local/bin/saxon
 
 # Now we have to get the one troublesome font that's not in any repo.
