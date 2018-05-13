@@ -32,11 +32,12 @@ ARG JENKINS_USER_EMAIL="tei-council@lists.tei-c.org"
 # Need to switch to root user to install stuff.
 USER root
 
-# We need to build rnv locally since it's no longer packaged for
+# We need to build `rnv` locally since it's no longer packaged for
 # Debian. Doing this before installing other stuff because it's
-# quicker for testing purposes. We need make for that and 
-# libexpat-dev is required to build rnv.
-RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install make build-essential libexpat-dev
+# quicker for testing purposes. We need `make` for that and 
+# `libexpat-dev` is required to build `rnv`.
+RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install make build-essential libexpat-dev \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN git clone https://github.com/dtolpin/RNV.git rnv && \ 
     cd rnv && \ 
@@ -88,7 +89,8 @@ RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install 
      #ttf-kochi-mincho \
      xmlstarlet \ 
      xsltproc \ 
-     zip
+     zip \
+     && rm -rf /var/lib/apt/lists/*
 
 # create a simple shell wrapper script for the 
 # saxon.jar provided by the Debian libsaxonhe-java package 
