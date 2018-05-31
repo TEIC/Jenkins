@@ -22,6 +22,22 @@
 #                 configure security in Jenkins. Out of the box, it allows anyone 
 #                 to run any job without any login. DO NOT FORGET TO DO THIS.
 
+# First: building `rnv` locally since it's no 
+# longer packaged for Debian 
+FROM debian as builder
+
+# We need `make` for that and 
+# `libexpat-dev` is required to build `rnv`.
+RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install ca-certificates git make build-essential libexpat-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+RUN mkdir -p /var/rnv && \
+    git clone https://github.com/dtolpin/RNV.git /var/rnv && \ 
+    cd /var/rnv && \ 
+    make -f Makefile.gnu rnv
+
+
+# Second: Build the final Jenkins image
 FROM jenkins/jenkins:lts
 LABEL maintainer="Martin Holmes and Peter Stadler for the TEI Council"
  
@@ -32,19 +48,8 @@ ARG JENKINS_USER_EMAIL="tei-council@lists.tei-c.org"
 # Need to switch to root user to install stuff.
 USER root
 
-# We need to build `rnv` locally since it's no longer packaged for
-# Debian. Doing this before installing other stuff because it's
-# quicker for testing purposes. We need `make` for that and 
-# `libexpat-dev` is required to build `rnv`.
-RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install make build-essential libexpat-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN git clone https://github.com/dtolpin/RNV.git rnv && \ 
-    cd rnv && \ 
-    make -f Makefile.gnu rnv && \
-    cp rnv /usr/bin/ && \
-    cd .. && \
-    rm -Rf rnv
+# Copy build artefacts from first step
+COPY --from=builder /var/rnv/rnv /usr/bin/ 
 
 # Install a bunch of packages we need. This package list has been 
 # customized a little from the original 2016 builder script set,
@@ -52,7 +57,8 @@ RUN git clone https://github.com/dtolpin/RNV.git rnv && \
 # Many required packages are already installed upstream. 
 # Various tex-related packages have been added as build failures
 # revealed the need for them.
-RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install ant \ 
+RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install \
+     ant \ 
      debhelper \ 
      debiandoc-sgml \ 
      devscripts \ 
@@ -73,8 +79,6 @@ RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install 
      linuxdoc-tools \ 
      lmodern \
      maven \ 
-     # do we really need this openssh-server?
-     openssh-server \ 
      psgml \ 
      texlive-fonts-recommended \ 
      texlive-generic-recommended \ 
