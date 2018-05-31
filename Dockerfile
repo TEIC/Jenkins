@@ -59,6 +59,7 @@ COPY --from=builder /var/rnv/rnv /usr/bin/
 # revealed the need for them.
 RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install \
      ant \ 
+     build-essential \
      debhelper \ 
      debiandoc-sgml \ 
      devscripts \ 
