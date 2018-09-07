@@ -50,7 +50,7 @@ ok  /<WARNING>Schematron warning:/
 ok /<\/WARNING>/
 ok /dpkg-genchanges: warning: the current version/
 # suppress warnings stemming from (NFS related) clock skew
-ok /make: Warning: File 'build-stamp' has modification time/
+ok /make: Warning: File '.*' has modification time/
 ok /make: warning:  Clock skew detected/
 error /warning: unfinished element/ 
 error /Stylesheet documentation generation failed/
