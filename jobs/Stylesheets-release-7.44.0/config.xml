@@ -49,7 +49,7 @@
   </builders>
   <publishers>
     <hudson.tasks.ArtifactArchiver>
-      <artifacts>*.zip,tei*_*,debian-tei-xsl/debian/tei-xsl/usr/share/xml/tei/stylesheet/teioo.jar,dist/xml/tei/stylesheet/**/*,dist/doc/tei-xsl/**/*</artifacts>
+      <artifacts>*.zip,tei-xsl_*,debian-tei-xsl/debian/tei-xsl/usr/share/xml/tei/stylesheet/teioo.jar,dist/xml/tei/stylesheet/**/*,dist/doc/tei-xsl/**/*</artifacts>
       <allowEmptyArchive>false</allowEmptyArchive>
       <onlyIfSuccessful>false</onlyIfSuccessful>
       <fingerprint>false</fingerprint>
