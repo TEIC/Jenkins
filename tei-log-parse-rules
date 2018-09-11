@@ -52,6 +52,11 @@ ok /dpkg-genchanges: warning: the current version/
 # suppress warnings stemming from (NFS related) clock skew
 ok /make: Warning: File '.*' has modification time/
 ok /make: warning:  Clock skew detected/
+
+#non-errors errors for Test2
+ok /InvalidExemplarRngErrors/
+#end of non-error errors for Test2
+
 error /warning: unfinished element/ 
 error /Stylesheet documentation generation failed/
 error /[Ee]rror/
