@@ -55,6 +55,8 @@ ok /make: warning:  Clock skew detected/
 
 #non-errors errors for Test2
 ok /InvalidExemplarRngErrors/
+#Don't worry about FOP warnings for now; there are always millions of them.
+ok /[fop] WARNING:/
 #end of non-error errors for Test2
 
 error /warning: unfinished element/ 
