@@ -42,6 +42,16 @@ The CSP can be relaxed by passing the appropriate Java options to the Jenkins st
 docker run --env JAVA_OPTS="-Dhudson.model.DirectoryBrowserSupport.CSP='default-src self; img-src *'" …
 ```
 
+## Usage of the Docker image *without* the Jenkins server 
+
+The Docker image is also handy when you want to test or build the Guidelines (and/or Stylesheets) locally on your machine. Navigate to the e.g. Stylesheets repo (you cloned from Github) and enter
+
+```
+docker run --rm -v `pwd`:/stylesheet -w /stylesheet -it --entrypoint "make" teic/jenkins:dev test
+```
+
+This will mount the current directory into the container and set the working directory within the container to that directory. We directly set the `make` command as entrypoint, so everything after the image name will be appended to that `make` command as parameters. In the above example it's simply "test" for testing the current state; another usefull target would be "dist" which creates the distributable files. 
+
 
 ## Limitations
 We do not install kindlegen for creating the .mobi version of the Guidelines, since this is non-free; and we do not do the minimal install of Oxygen which is required to build the Stylesheets documentation, since this requires a license. If either of these requirements is installed into the docker container, these build processes will begin working automatically. 
