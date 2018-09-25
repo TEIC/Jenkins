@@ -52,6 +52,7 @@ ok /dpkg-genchanges: warning: the current version/
 # suppress warnings stemming from (NFS related) clock skew
 ok /make: Warning: File '.*' has modification time/
 ok /make: warning:  Clock skew detected/
+ok /Warning: mimetype modified in the future./
 
 #non-errors errors for Test2
 ok /InvalidExemplarRngErrors/
