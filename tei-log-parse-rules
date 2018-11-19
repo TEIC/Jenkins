@@ -54,6 +54,10 @@ ok /make: Warning: File '.*' has modification time/
 ok /make: warning:  Clock skew detected/
 ok /Warning: mimetype modified in the future./
 
+#People mention all sorts of stuff in commit messages, which 
+#sometimes get echoed out to the console for some reason.
+ok /Commit message:/
+
 #non-errors errors for Test2
 ok /InvalidExemplarRngErrors/
 #Don't worry about FOP warnings for now; there are always millions of them.
