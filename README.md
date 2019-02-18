@@ -51,13 +51,28 @@ docker run --env JAVA_OPTS="-Dhudson.model.DirectoryBrowserSupport.CSP='default-
 
 ## Usage of the Docker image *without* the Jenkins server 
 
-The Docker image is also handy when you want to test or build the Guidelines (and/or Stylesheets) locally on your machine. Navigate to the e.g. Stylesheets repo (you cloned from Github) and enter
+The Docker image is also handy when you want to test or build the Guidelines (and/or Stylesheets) locally on your machine. 
+You will need to mount the local Stylesheets and TEI directories into the container, and set the working directory.
+
+### Use with Stylesheets
+
+Navigate to the Stylesheets repo (you cloned from Github) and enter
 
 ```
 docker run --rm -v `pwd`:/stylesheet -w /stylesheet -it --entrypoint "make" teic/jenkins:dev test
 ```
 
-This will mount the current directory into the container and set the working directory within the container to that directory. We directly set the `make` command as entrypoint, so everything after the image name will be appended to that `make` command as parameters. In the above example it's simply "test" for testing the current state; another usefull target would be "dist" which creates the distributable files. 
+This will mount the current directory into the container and set the working directory within the container to that directory. We directly set the `make` command as entrypoint so everything after the image name will be appended to that `make` command as parameters. In the above example it's simply "test" for testing the current state; another useful target would be "dist" which creates the distributable files. 
+
+### Use with Guidelines
+
+Navigate to the Guidelines repo (you cloned from Github) and enter
+
+```
+docker run --rm -v `pwd`:/tei -w /tei/P5 -v /YOUR/PATH/TO/TEI-STYLESHEETS:/usr/share/xml/tei/stylesheet -it --entrypoint "make" teic/jenkins:dev test
+```
+
+This will mount the current directory into the container and set the working directory within the container to the subdirectory "P5". We directly set the `make` command as entrypoint so everything after the image name will be appended to that `make` command as parameters. In the above example it's simply "test" for testing the current state; another useful target would be "dist" which creates the distributable files. 
 
 
 ## Limitations
