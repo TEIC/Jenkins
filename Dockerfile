@@ -59,6 +59,7 @@ COPY --from=builder /var/rnv/rnv /usr/bin/
 # revealed the need for them.
 RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install \
      ant \ 
+     ant-optional \
      build-essential \
      debhelper \ 
      debiandoc-sgml \ 
@@ -80,6 +81,7 @@ RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install 
      linuxdoc-tools \ 
      lmodern \
      maven \ 
+     openjdk-8-jdk \
      psgml \ 
      texlive-fonts-recommended \ 
      texlive-generic-recommended \ 
