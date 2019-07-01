@@ -152,13 +152,19 @@ RUN /usr/local/bin/install-plugins.sh \
 COPY jobs /tmp/jobs
 COPY tei-log-parse-rules /tmp/tei-log-parse-rules
 
-# Configure settings for git
-# and save it for reuse
+# a) Configure settings for git
+# and save it for reuse to /usr/share/jenkins/ref/
 # because ${JENKINS_HOME} is declared as a volume
-# and its content won't survive 
+# and its content won't survive
+# b) add symlink for ant libraries (e.g. resolver.jar)
+# to /usr/share/jenkins/ref/ as well 
+# c) copy job descriptions as tar archive
+# again to /usr/share/jenkins/ref/
 RUN git config --global user.email ${JENKINS_USER_EMAIL} \
     && git config --global user.name ${JENKINS_USER_NAME} \
     && cp .gitconfig /usr/share/jenkins/ref/ \
+    && mkdir /usr/share/jenkins/ref/.ant \
+    && ln -s /usr/share/java /usr/share/jenkins/ref/.ant/lib \
     && tar cfz /usr/share/jenkins/ref/jobs.tar.gz -C /tmp/ jobs tei-log-parse-rules
 
 # That should be it.
