@@ -28,7 +28,7 @@ FROM debian as builder
 
 # We need `make` for that and 
 # `libexpat-dev` is required to build `rnv`.
-RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install ca-certificates git make build-essential libexpat-dev \
+RUN apt-get update && apt-get --yes --no-install-recommends --no-install-suggests install ca-certificates git make build-essential libexpat-dev \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /var/rnv && \
@@ -57,7 +57,7 @@ COPY --from=builder /var/rnv/rnv /usr/bin/
 # Many required packages are already installed upstream. 
 # Various tex-related packages have been added as build failures
 # revealed the need for them.
-RUN apt-get update && apt-get --yes --force-yes --no-install-recommends install \
+RUN apt-get update && apt-get --yes --no-install-recommends --no-install-suggests install \
      ant \ 
      ant-optional \
      build-essential \
