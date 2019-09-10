@@ -145,7 +145,8 @@ RUN /usr/local/bin/install-plugins.sh \
     PrioritySorter \
     scm-api \
     github \
-    github-api
+    github-api \
+    cors-filter
 
 # copy the initial job configuration and log parse rules to /tmp
 # for convenience, we tar it and copy it to /usr/share/jenkins/ref/
