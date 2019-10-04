@@ -146,7 +146,8 @@ RUN /usr/local/bin/install-plugins.sh \
     scm-api \
     github \
     github-api \
-    cors-filter
+    cors-filter \
+    build-symlink
 
 # copy the initial job configuration and log parse rules to /tmp
 # for convenience, we tar it and copy it to /usr/share/jenkins/ref/
