@@ -70,6 +70,8 @@ RUN apt-get update && apt-get --yes --no-install-recommends --no-install-suggest
      fonts-ipafont-gothic \ 
      fonts-ipafont-mincho \
      fonts-linuxlibertine \ 
+     # provides Noto font families for Traditional Chinese, Simplified Chinese, Japanese and Korean, see https://packages.debian.org/buster/fonts-noto-cjk
+     fonts-noto-cjk \
      jing \ 
      libfile-fcntllock-perl \ 
      libjing-java \ 
