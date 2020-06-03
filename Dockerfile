@@ -65,10 +65,11 @@ RUN apt-get update && apt-get --yes --no-install-recommends --no-install-suggest
      debiandoc-sgml \ 
      devscripts \ 
      fakeroot \
-     fonts-arphic-ukai \ 
-     fonts-arphic-uming \ 
-     fonts-ipafont-gothic \ 
-     fonts-ipafont-mincho \
+     # deprecated fonts; not needed anymore for the Guidelines' build
+     #fonts-arphic-ukai \ 
+     #fonts-arphic-uming \ 
+     #fonts-ipafont-gothic \ 
+     #fonts-ipafont-mincho \
      fonts-linuxlibertine \ 
      # provides Noto font families for Traditional Chinese, Simplified Chinese, Japanese and Korean, see https://packages.debian.org/buster/fonts-noto-cjk
      fonts-noto-cjk \
@@ -89,7 +90,8 @@ RUN apt-get update && apt-get --yes --no-install-recommends --no-install-suggest
      texlive-latex-extra \ 
      texlive-xetex \ 
      trang \ 
-     ttf-baekmuk \ 
+     # deprecated font; not needed anymore for the Guidelines' build
+     #ttf-baekmuk \ 
      ttf-dejavu \ 
      ttf-junicode \ 
      # fonts are replaced by fonts-ipafont-gothic fonts-ipafont-mincho (see https://packages.debian.org/wheezy/ttf-kochi-gothic) 
@@ -107,13 +109,14 @@ RUN echo "#! /bin/bash" > /usr/local/bin/saxon \
     && chmod 755 /usr/local/bin/saxon
 
 # Now we have to get the one troublesome font that's not in any repo.
-RUN mkdir /usr/share/fonts/truetype/hannom && \
-    cd /usr/share/fonts/truetype/hannom && \
-    wget -O hannom.zip http://downloads.sourceforge.net/project/vietunicode/hannom/hannom%20v2005/hannomH.zip && \
-    unzip hannom.zip && \
-    find . -iname "*.ttf" | rename 's/\ /_/g' && \
-    rm hannom.zip && \
-    fc-cache -f -v
+# deprecated font; not needed anymore for the Guidelines' build
+#RUN mkdir /usr/share/fonts/truetype/hannom && \
+#    cd /usr/share/fonts/truetype/hannom && \
+#    wget -O hannom.zip http://downloads.sourceforge.net/project/vietunicode/hannom/hannom%20v2005/hannomH.zip && \
+#    unzip hannom.zip && \
+#    find . -iname "*.ttf" | rename 's/\ /_/g' && \
+#    rm hannom.zip && \
+#    fc-cache -f -v
 
 # running as user jenkins for installing plugins,
 # and finally starting the service
