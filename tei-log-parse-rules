@@ -62,6 +62,8 @@ ok /Commit message:/
 ok /InvalidExemplarRngErrors/
 #Don't worry about FOP warnings for now; there are always millions of them.
 ok /\[fop\] WARNING:/
+# Now we use internal source by default.
+ok /\[exec\] WARNING: No localsource set./
 #end of non-error errors for Test2
 
 error /warning: unfinished element/ 
