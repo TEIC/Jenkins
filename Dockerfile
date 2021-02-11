@@ -72,6 +72,8 @@ RUN apt-get update && apt-get --yes --no-install-recommends --no-install-suggest
      #fonts-ipafont-mincho \
      fonts-linuxlibertine \ 
      # provides Noto font families for Traditional Chinese, Simplified Chinese, Japanese and Korean, see https://packages.debian.org/buster/fonts-noto-cjk
+     fonts-dejavu \ 
+     fonts-junicode \ 
      fonts-noto-cjk \
      jing \ 
      libfile-fcntllock-perl \ 
@@ -92,8 +94,6 @@ RUN apt-get update && apt-get --yes --no-install-recommends --no-install-suggest
      trang \ 
      # deprecated font; not needed anymore for the Guidelines' build
      #ttf-baekmuk \ 
-     ttf-dejavu \ 
-     ttf-junicode \ 
      # fonts are replaced by fonts-ipafont-gothic fonts-ipafont-mincho (see https://packages.debian.org/wheezy/ttf-kochi-gothic) 
      #ttf-kochi-gothic \ 
      #ttf-kochi-mincho \
