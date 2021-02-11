@@ -39,7 +39,7 @@ export W3C_CHECKLINK_CFG=$JENKINS_HOME/jobs/Guidelines-Link-Check/linkcheckerrca
 checklink -e -q -D6 -X ".+readme-\d\.\d\.\d\.html" $TARGET ;;
 *) echo "Using configuration for release version.";
 export W3C_CHECKLINK_CFG=$JENKINS_HOME/jobs/Guidelines-Link-Check/linkcheckerrcrelease;
-checklink -e -q -D6 -X ".+readme-\d\.\d\.\d\.html" $TARGET ;;
+checklink -e -q -D6 $TARGET ;;
 esac
 
 #echo "Transforming checker report..."
