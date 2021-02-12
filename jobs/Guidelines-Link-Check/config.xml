@@ -31,19 +31,21 @@ VERSION=`cat ${VERSIONFILE}`
 TARGET=$JENKINS_HOME/jobs/TEIP5-dev/lastSuccessful/archive/P5/release/doc/tei-p5-doc/en/html/index.html
 
 
-echo &quot;Running link checking for P5 version $VERSION.&quot;
-        
-case &quot;$VERSION&quot; in
-*[a-z])  echo &quot;Using configuration for pre-release version.&quot;;
-  linkchecker --config=$JENKINS_HOME/jobs/Guidelines-Link-Check/linkcheckerrcalphabeta $TARGET ;;
-*) echo &quot;Using configuration for release version.&quot;;
-  linkchecker --config=$JENKINS_HOME/jobs/Guidelines-Link-Check/linkcheckerrcrelease $TARGET ;;
+echo "Running link checking for P5 version $VERSION."
+
+case "$VERSION" in
+*[a-z])  echo "Using configuration for pre-release version.";
+export W3C_CHECKLINK_CFG=$JENKINS_HOME/jobs/Guidelines-Link-Check/linkcheckerrcalphabeta;
+checklink -e -q -D6 -X ".+readme-\d\.\d\.\d\.html" $TARGET ;;
+*) echo "Using configuration for release version.";
+export W3C_CHECKLINK_CFG=$JENKINS_HOME/jobs/Guidelines-Link-Check/linkcheckerrcrelease;
+checklink -e -q -D6 $TARGET ;;
 esac
-        
-echo &quot;Transforming checker report...&quot;
-saxon -s:$JENKINS_HOME/workspace/Guidelines-Link-Check/checkResults/linkchecker-out.xml -xsl:$JENKINS_HOME/jobs/Guidelines-Link-Check/linkchecker.xsl
-echo &quot;Done!&quot;
-exit</command>
+
+#echo "Transforming checker report..."
+#saxon -s:$JENKINS_HOME/workspace/Guidelines-Link-Check/checkResults/linkchecker-out.xml -xsl:$JENKINS_HOME/jobs/Guidelines-Link-Check/linkchecker.xsl
+#echo "Done!"
+#exit</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>

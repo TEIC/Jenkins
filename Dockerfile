@@ -71,16 +71,20 @@ RUN apt-get update && apt-get --yes --no-install-recommends --no-install-suggest
      fonts-junicode \ 
      fonts-noto-cjk \
      jing \ 
+     libcss-dom-perl \
      libfile-fcntllock-perl \ 
      libjing-java \ 
      libsaxon-java \ 
-     libsaxonhe-java \ 
-     libtrang-java \ 
+     libsaxonhe-java \
+     libterm-readkey-perl \
+     libtrang-java \
+     libwww-perl \
      libxml2-utils \ 
-     linkchecker \ 
      linuxdoc-tools \ 
      lmodern \
-     maven \ 
+     make \
+     maven \
+     perl-modules \
      psgml \ 
      texlive-fonts-recommended \ 
      texlive-generic-recommended \ 
@@ -91,6 +95,10 @@ RUN apt-get update && apt-get --yes --no-install-recommends --no-install-suggest
      xsltproc \ 
      zip \
      && rm -rf /var/lib/apt/lists/*
+
+# Install W3C linkchecker skript "checklink"
+# https://dev.w3.org/perl/modules/W3C/LinkChecker/docs/checklink
+RUN PERL_MM_USE_DEFAULT=1 perl -MCPAN -e 'install W3C::LinkChecker'
 
 # create a simple shell wrapper script for the 
 # saxon.jar provided by the Debian libsaxonhe-java package 
