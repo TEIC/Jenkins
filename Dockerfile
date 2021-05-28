@@ -80,6 +80,7 @@ RUN apt-get update && apt-get --yes --no-install-recommends --no-install-suggest
      libtrang-java \
      libwww-perl \
      libxml2-utils \ 
+     tidy \
      linuxdoc-tools \ 
      lmodern \
      make \
