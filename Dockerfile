@@ -60,6 +60,7 @@ COPY --from=builder /var/rnv/rnv /usr/bin/
 RUN apt-get update && apt-get --yes --no-install-recommends --no-install-suggests install \
      ant \ 
      ant-optional \
+     ant-contrib \
      build-essential \
      debhelper \ 
      debiandoc-sgml \ 
