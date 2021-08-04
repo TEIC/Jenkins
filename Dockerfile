@@ -40,7 +40,7 @@ RUN mkdir -p /var/rnv && \
 # Second: Build the final Jenkins image
 FROM jenkins/jenkins:lts
 LABEL maintainer="Martin Holmes and Peter Stadler for the TEI Council"
-LABEL org.opencontainers.image.source=https://github.com/TEIC/Jenkins
+LABEL org.opencontainers.image.source="https://github.com/TEIC/Jenkins"
  
 # Variables we'll use later on.
 ARG JENKINS_USER_NAME="TEI Council"
