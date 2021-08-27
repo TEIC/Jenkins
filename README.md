@@ -1,8 +1,8 @@
 # Jenkins
 
-[![GitHub](https://img.shields.io/github/license/teic/Jenkins.svg)](https://github.com/TEIC/Jenkins/blob/dev/LICENSE)
+[![License](https://img.shields.io/github/license/teic/Jenkins.svg)](https://github.com/TEIC/Jenkins/blob/dev/LICENSE)
 [![Docker Automated build](https://img.shields.io/docker/automated/teic/jenkins.svg)](https://hub.docker.com/r/teic/jenkins)
-[![Docker Build Status](https://img.shields.io/docker/build/teic/jenkins.svg)](https://hub.docker.com/r/teic/jenkins)
+[![Docker](https://github.com/TEIC/Jenkins/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/TEIC/Jenkins/actions/workflows/docker-publish.yml)
 
 This repository contains a Dockerfile, job configurations, and instructions for setting up and maintaining Jenkins build servers for the TEI. 
 A ready made Docker image is available on [hub.docker.com](https://hub.docker.com/r/teic/jenkins/), and if you have docker installed you should be able to pull it with:
