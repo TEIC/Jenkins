@@ -90,7 +90,7 @@ RUN apt-get update && apt-get --yes --no-install-recommends --no-install-suggest
      perl-modules \
      psgml \ 
      texlive-fonts-recommended \ 
-     texlive-generic-recommended \ 
+     texlive-plain-generic \ 
      texlive-latex-extra \ 
      texlive-xetex \ 
      trang \ 
