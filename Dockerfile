@@ -58,7 +58,7 @@ COPY --from=builder /var/rnv/rnv /usr/bin/
 # Many required packages are already installed upstream. 
 # Various tex-related packages have been added as build failures
 # revealed the need for them.
-RUN apt-get update && apt-get --yes --no-install-recommends --no-install-suggests install \
+RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests install \
      ant \ 
      ant-optional \
      ant-contrib \
@@ -97,6 +97,7 @@ RUN apt-get update && apt-get --yes --no-install-recommends --no-install-suggest
      xmlstarlet \ 
      xsltproc \ 
      zip \
+     && apt-get -y dist-upgrade \
      && rm -rf /var/lib/apt/lists/*
 
 # Install W3C linkchecker skript "checklink"
