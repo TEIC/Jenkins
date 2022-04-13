@@ -57,11 +57,6 @@
       <failBuildOnError>true</failBuildOnError>
       <parsingRulesPath>/var/jenkins_home/tei-log-parse-rules</parsingRulesPath>
     </hudson.plugins.logparser.LogParserPublisher>
-    <hudson.tasks.Mailer plugin="mailer@1.15">
-      <recipients>mholmes@uvic.ca tei-council@lists.tei-c.org</recipients>
-      <dontNotifyEveryUnstableBuild>false</dontNotifyEveryUnstableBuild>
-      <sendToIndividuals>true</sendToIndividuals>
-    </hudson.tasks.Mailer>
   </publishers>
   <buildWrappers/>
 </project>
