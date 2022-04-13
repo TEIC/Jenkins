@@ -36,10 +36,10 @@ echo "Running link checking for P5 version $VERSION."
 case "$VERSION" in
 *[a-z])  echo "Using configuration for pre-release version.";
 export W3C_CHECKLINK_CFG=$JENKINS_HOME/jobs/Guidelines-Link-Check/linkcheckerrcalphabeta;
-checklink -e -q -D6 -X ".+readme-\d\.\d\.\d\.html" $TARGET ;;
+checklink --follow-file-links -b -e -q -D6 -X ".+readme-\d\.\d\.\d\.html" $TARGET ;;
 *) echo "Using configuration for release version.";
 export W3C_CHECKLINK_CFG=$JENKINS_HOME/jobs/Guidelines-Link-Check/linkcheckerrcrelease;
-checklink -e -q -D6 $TARGET ;;
+checklink --follow-file-links -b -e -q -D6 $TARGET ;;
 esac
 
 #echo "Transforming checker report..."
