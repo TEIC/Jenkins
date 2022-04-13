@@ -37,7 +37,7 @@
   <concurrentBuild>false</concurrentBuild>
   <builders>
     <hudson.tasks.Shell>
-      <command>cd P5 &amp;&amp; make VCS=git INJENKINS=true XSL=${JENKINS_HOME}/jobs/Stylesheets-release-7.44.0/lastSuccessful/archive/dist/xml/tei/stylesheet clean html-web epub3 Guidelines.pdf</command>
+      <command>cd P5 &amp;&amp; make VCS=git INJENKINS=true XSL=${JENKINS_HOME}/jobs/Stylesheets-release-7.44.0/lastSuccessful/archive/dist/xml/tei/stylesheet clean html-web epub3 pdf</command>
     </hudson.tasks.Shell>
   </builders>
   <publishers>
