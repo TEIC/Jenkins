@@ -112,9 +112,10 @@ RUN echo "#! /bin/bash" > /usr/local/bin/saxon \
 
 # running as user jenkins for installing plugins,
 # and finally starting the service
+# (removed scp plugin due to "Insecure credential storage and transmission" warning)
 USER jenkins:jenkins
 WORKDIR ${JENKINS_HOME}
-RUN /usr/local/bin/install-plugins.sh \
+RUN jenkins-plugin-cli --plugins \
     junit \
     script-security \
     matrix-project \
@@ -137,8 +138,6 @@ RUN /usr/local/bin/install-plugins.sh \
     jobConfigHistory \
     plot \
     log-parser \
-    # disabled scp plugin due to "Insecure credential storage and transmission" warning
-    #scp \
     PrioritySorter \
     scm-api \
     github \
