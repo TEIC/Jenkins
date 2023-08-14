@@ -22,22 +22,6 @@
 #                 configure security in Jenkins. Out of the box, it allows anyone 
 #                 to run any job without any login. DO NOT FORGET TO DO THIS.
 
-# First: building `rnv` locally since it's no 
-# longer packaged for Debian 
-FROM debian as builder
-
-# We need `make` for that and 
-# `libexpat-dev` is required to build `rnv`.
-RUN apt-get update && apt-get --yes --no-install-recommends --no-install-suggests install ca-certificates git make build-essential libexpat-dev \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN mkdir -p /var/rnv && \
-    git clone https://github.com/hartwork/rnv.git /var/rnv && \ 
-    cd /var/rnv && \ 
-    make -f Makefile.gnu rnv
-
-
-# Second: Build the final Jenkins image
 FROM jenkins/jenkins:lts
 LABEL maintainer="Martin Holmes and Peter Stadler for the TEI Council"
 LABEL org.opencontainers.image.source="https://github.com/TEIC/Jenkins"
@@ -49,9 +33,6 @@ ARG JENKINS_USER_EMAIL="tei-council@lists.tei-c.org"
 # Need to switch to root user to install stuff.
 USER root
 
-# Copy build artefacts from first step
-COPY --from=builder /var/rnv/rnv /usr/bin/ 
-
 # Install a bunch of packages we need. This package list has been 
 # customized a little from the original 2016 builder script set,
 # because we're working with Debian Jessie instead of Ubuntu.
@@ -62,10 +43,14 @@ RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests i
      ant \ 
      ant-optional \
      ant-contrib \
+     asciidoc \
+     autotools-dev \
      build-essential \
      debhelper \ 
      debiandoc-sgml \ 
      devscripts \ 
+     docbook-xml \
+     docbook-xsl \
      fakeroot \
      fonts-linuxlibertine \ 
      # provides Noto font families for Traditional Chinese, Simplified Chinese, Japanese and Korean, see https://packages.debian.org/buster/fonts-noto-cjk
@@ -74,6 +59,7 @@ RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests i
      fonts-noto-cjk \
      jing \ 
      libcss-dom-perl \
+     libexpat-dev \
      libfile-fcntllock-perl \ 
      libjing-java \ 
      libsaxon-java \ 
@@ -99,6 +85,16 @@ RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests i
      zip \
      && apt-get -y dist-upgrade \
      && rm -rf /var/lib/apt/lists/*
+
+# Building `rnv` locally since it's no 
+# longer packaged for Debian 
+RUN mkdir -p /var/rnv && \
+    git clone https://github.com/hartwork/rnv.git /var/rnv && \ 
+    cd /var/rnv && \ 
+    ./bootstrap && \
+    ./configure && \
+    make && \
+    make install
 
 # Install W3C linkchecker skript "checklink"
 # https://dev.w3.org/perl/modules/W3C/LinkChecker/docs/checklink
