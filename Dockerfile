@@ -32,7 +32,7 @@ RUN apt-get update && apt-get --yes --no-install-recommends --no-install-suggest
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /var/rnv && \
-    git clone https://github.com/dtolpin/RNV.git /var/rnv && \ 
+    git clone https://github.com/hartwork/rnv.git /var/rnv && \ 
     cd /var/rnv && \ 
     make -f Makefile.gnu rnv
 
