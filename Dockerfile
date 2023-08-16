@@ -130,7 +130,6 @@ RUN jenkins-plugin-cli --plugins \
     git-client \
     copyartifact \
     emotional-jenkins-plugin \
-    greenballs \
     jobConfigHistory \
     plot \
     log-parser \
