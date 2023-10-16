@@ -66,6 +66,13 @@ ok /\[fop\] WARNING:/
 ok /\[exec\] WARNING: No localsource set./
 #end of non-error errors for Test2
 
+#MDH: temporary errors resulting from deprecation in Java 17 (should be OK to remove after moving to Java 18+)
+ok /WARNING: A terminally deprecated method in java.lang.System has been called/
+ok /WARNING: System::setSecurityManager has been called by org.apache.tools.ant.types.Permissions/
+ok /WARNING: Please consider reporting this to the maintainers of org.apache.tools.ant.types.Permissions/
+ok /WARNING: System::setSecurityManager will be removed in a future release/
+#end of MDH: temporary errors resulting from deprecation in Java 17 (should be OK to remove after moving to Java 18+)
+
 error /warning: unfinished element/ 
 error /Stylesheet documentation generation failed/
 error /[Ee]rror/
