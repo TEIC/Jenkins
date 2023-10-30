@@ -30,6 +30,11 @@ LABEL org.opencontainers.image.source="https://github.com/TEIC/Jenkins"
 ARG JENKINS_USER_NAME="TEI Council"
 ARG JENKINS_USER_EMAIL="tei-council@lists.tei-c.org"
 
+# set environment variables
+# see https://github.com/TEIC/Jenkins/issues/12
+ENV LC_ALL=C.UTF-8
+ENV LANG=C.UTF-8
+
 # Need to switch to root user to install stuff.
 USER root
 
