@@ -60,7 +60,6 @@ RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests i
      fonts-linuxlibertine \ 
      # provides Noto font families for Traditional Chinese, Simplified Chinese, Japanese and Korean, see https://packages.debian.org/buster/fonts-noto-cjk
      fonts-dejavu \ 
-     fonts-junicode \ 
      fonts-noto-cjk \
      jing \ 
      libcss-dom-perl \
@@ -89,6 +88,10 @@ RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests i
      xsltproc \ 
      zip \
      && apt-get -y dist-upgrade \
+     && echo 'APT::Default-Release "bookworm";' > /etc/apt/apt.conf.d/default-release \
+     && echo "deb http://deb.debian.org/debian/ testing main" > /etc/apt/sources.list.d/testing.list \
+     && apt update \
+     && apt-get -y --no-install-recommends --no-install-suggests install fonts-junicode/testing \
      && rm -rf /var/lib/apt/lists/*
 
 # Building `rnv` locally since it's no 
