@@ -23,7 +23,7 @@
 #                 to run any job without any login. DO NOT FORGET TO DO THIS.
 
 FROM jenkins/jenkins:lts
-LABEL maintainer="Martin Holmes and Peter Stadler for the TEI Council"
+LABEL org.opencontainers.image.authors="Martin Holmes and Peter Stadler for the TEI Council"
 LABEL org.opencontainers.image.source="https://github.com/TEIC/Jenkins"
  
 # Variables we'll use later on.
