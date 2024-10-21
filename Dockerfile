@@ -2,10 +2,6 @@
 
 # Written by Martin Holmes, December 2016. #
 
-# We start from the Jenkins lts version, which is based on
-# openjdk:8-jdk, which is based ultimately on debian 
-# stretch.
-
 # As the Jenkins page says, the image should be started like
 # this: 
 
