@@ -73,6 +73,9 @@ ok /WARNING: Please consider reporting this to the maintainers of org.apache.too
 ok /WARNING: System::setSecurityManager will be removed in a future release/
 #end of MDH: temporary errors resulting from deprecation in Java 17 (should be OK to remove after moving to Java 18+)
 
+#MDH 2025-01-23: Useful warning message for end-users should not break builds.
+ok /WARNING: Ignoring invalid sch:report/
+
 error /warning: unfinished element/ 
 error /Stylesheet documentation generation failed/
 error /[Ee]rror/
