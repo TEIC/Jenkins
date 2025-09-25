@@ -84,7 +84,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       packages: write
-    needs: docker
+    needs: build
     steps:
       - name: ghcr.io cleanup action
         uses: dataaxiom/ghcr-cleanup-action@v1
