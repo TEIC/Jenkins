@@ -34,9 +34,7 @@ ENV LANG=C.UTF-8
 # Need to switch to root user to install stuff.
 USER root
 
-# Install a bunch of packages we need. This package list has been 
-# customized a little from the original 2016 builder script set,
-# because we're working with Debian Jessie instead of Ubuntu.
+# Install a bunch of packages we need.
 # Many required packages are already installed upstream. 
 # Various tex-related packages have been added as build failures
 # revealed the need for them.
@@ -56,6 +54,7 @@ RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests i
      fonts-linuxlibertine \
      # provides Noto font families for Traditional Chinese, Simplified Chinese, Japanese and Korean, see https://packages.debian.org/buster/fonts-noto-cjk
      fonts-dejavu \
+     fonts-junicode \
      fonts-noto-cjk \
      jing \
      libcss-dom-perl \
@@ -76,6 +75,7 @@ RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests i
      perl-modules \
      psgml \
      texlive-fonts-recommended \
+     texlive-lang-greek \
      texlive-plain-generic \
      texlive-latex-extra \
      texlive-xetex \
@@ -83,11 +83,6 @@ RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests i
      xmlstarlet \
      xsltproc \
      zip \
-     && apt-get -y dist-upgrade \
-     && echo 'APT::Default-Release "bookworm";' > /etc/apt/apt.conf.d/default-release \
-     && echo "deb http://deb.debian.org/debian/ testing main" > /etc/apt/sources.list.d/testing.list \
-     && apt update \
-     && apt-get -y --no-install-recommends --no-install-suggests install fonts-junicode/testing \
      && rm -rf /var/lib/apt/lists/*
 
 # Building `rnv` locally since it's no 
