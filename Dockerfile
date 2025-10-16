@@ -34,9 +34,7 @@ ENV LANG=C.UTF-8
 # Need to switch to root user to install stuff.
 USER root
 
-# Install a bunch of packages we need. This package list has been 
-# customized a little from the original 2016 builder script set,
-# because we're working with Debian Jessie instead of Ubuntu.
+# Install a bunch of packages we need.
 # Many required packages are already installed upstream. 
 # Various tex-related packages have been added as build failures
 # revealed the need for them.
