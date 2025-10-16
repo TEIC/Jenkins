@@ -41,47 +41,47 @@ USER root
 # Various tex-related packages have been added as build failures
 # revealed the need for them.
 RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests install \
-     ant \ 
+     ant \
      ant-optional \
      ant-contrib \
      asciidoc \
      autotools-dev \
      build-essential \
-     debhelper \ 
-     debiandoc-sgml \ 
-     devscripts \ 
+     debhelper \
+     debiandoc-sgml \
+     devscripts \
      docbook-xml \
      docbook-xsl \
      fakeroot \
-     fonts-linuxlibertine \ 
+     fonts-linuxlibertine \
      # provides Noto font families for Traditional Chinese, Simplified Chinese, Japanese and Korean, see https://packages.debian.org/buster/fonts-noto-cjk
-     fonts-dejavu \ 
+     fonts-dejavu \
      fonts-noto-cjk \
-     jing \ 
+     jing \
      libcss-dom-perl \
      libexpat-dev \
-     libfile-fcntllock-perl \ 
-     libjing-java \ 
-     libsaxon-java \ 
+     libfile-fcntllock-perl \
+     libjing-java \
+     libsaxon-java \
      libsaxonhe-java \
      libterm-readkey-perl \
      libtrang-java \
      libwww-perl \
-     libxml2-utils \ 
+     libxml2-utils \
      tidy \
-     linuxdoc-tools \ 
+     linuxdoc-tools \
      lmodern \
      make \
      maven \
      perl-modules \
-     psgml \ 
-     texlive-fonts-recommended \ 
-     texlive-plain-generic \ 
-     texlive-latex-extra \ 
-     texlive-xetex \ 
-     trang \ 
-     xmlstarlet \ 
-     xsltproc \ 
+     psgml \
+     texlive-fonts-recommended \
+     texlive-plain-generic \
+     texlive-latex-extra \
+     texlive-xetex \
+     trang \
+     xmlstarlet \
+     xsltproc \
      zip \
      && apt-get -y dist-upgrade \
      && echo 'APT::Default-Release "bookworm";' > /etc/apt/apt.conf.d/default-release \
@@ -93,8 +93,8 @@ RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests i
 # Building `rnv` locally since it's no 
 # longer packaged for Debian 
 RUN mkdir -p /var/rnv && \
-    git clone https://github.com/hartwork/rnv.git /var/rnv && \ 
-    cd /var/rnv && \ 
+    git clone https://github.com/hartwork/rnv.git /var/rnv && \
+    cd /var/rnv && \
     ./bootstrap && \
     ./configure && \
     make && \
