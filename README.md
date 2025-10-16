@@ -5,7 +5,8 @@
 [![Docker](https://github.com/TEIC/Jenkins/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/TEIC/Jenkins/actions/workflows/docker-publish.yml)
 
 This repository contains a Dockerfile, job configurations, and instructions for setting up and maintaining Jenkins build servers for the TEI. 
-A ready made Docker image is available on [hub.docker.com](https://hub.docker.com/r/teic/jenkins/), and if you have docker installed you should be able to pull it with:
+A ready-made Docker image is available on [hub.docker.com](https://hub.docker.com/r/teic/jenkins/), 
+and if you have docker installed you should be able to pull it with:
 
 ```
 docker pull teic/jenkins
@@ -39,8 +40,9 @@ Finally, we need to populate the `jobs` directory within `jenkins_home` and add 
 these are available from a tar archive at `jenkins_home`, so you simply need to issue `tar xfz jobs.tar.gz` within this directory to put everything in place.
 Click "Reload Configuration from Disk" for the changes to take effect.
 
-Once you're set up, remember to backup/keep your data directory `/your/jenkins_home` 
-so whenever you start a new container, it will inherit the job data and configuration.  
+Once you're set up, remember to back up/keep your data directory 
+`/your/jenkins_home` so whenever you start a new container, it will inherit 
+the job data and configuration.  
 
 
 ## Content Security Policy (CSP)
@@ -60,7 +62,7 @@ You will need to mount the local Stylesheets and TEI directories into the contai
 
 ### Use with Stylesheets
 
-Navigate to the Stylesheets repo (you cloned from Github) and enter
+Navigate to the Stylesheets repo (you cloned from GitHub) and enter
 
 ```
 docker run --rm -v `pwd`:/stylesheet -w /stylesheet -it --entrypoint "make" teic/jenkins:dev test
@@ -70,7 +72,7 @@ This will mount the current directory into the container and set the working dir
 
 ### Use with Guidelines
 
-Navigate to the Guidelines repo (you cloned from Github) and enter
+Navigate to the Guidelines repo (you cloned from GitHub) and enter
 
 ```
 docker run --rm -v `pwd`:/tei -w /tei/P5 -v /YOUR/PATH/TO/TEI-STYLESHEETS:/usr/share/xml/tei/stylesheet -it --entrypoint "make" teic/jenkins:dev test
@@ -81,16 +83,15 @@ This will mount the current directory into the container and set the working dir
 
 ## Limitations
 
-We do not install kindlegen for creating the .mobi version of the Guidelines, since this is non-free; and we do not do the minimal install of Oxygen which is required to build the Stylesheets documentation, since this requires a license. If either of these requirements is installed into the docker container, these build processes will begin working automatically. 
+We do not do the minimal installation of Oxygen which is required to build 
+the Stylesheets documentation, since this requires a license. 
+
+But, if this requirement is installed into the docker container, 
+the respective build process will begin working automatically. 
 
 ### add oXygen 
 
-* Download oXygenXML editor from [Syncrosoft](http://oxygenxml.com) and extract/install it to some directory
-* Mount this directoy (with the license file) into the container as `/usr/share/oxygen` 
-
-### add kindlegen 
-
-* Download KindleGen from [Amazon](https://www.amazon.com/gp/feature.html?ie=UTF8&docId=1000765211)
-* Mount the directoy (with the kindlegen binary) into the container as `/usr/share/kindlegen` 
-
-
+* Download oXygenXML editor from [Syncro Soft](https://oxygenxml.com) and 
+  extract/install it to some directory
+* Mount this directory (with the license file) into the container as 
+  `/usr/share/oxygen` 
