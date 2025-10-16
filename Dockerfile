@@ -75,6 +75,7 @@ RUN apt-get update && apt-get -y --no-install-recommends --no-install-suggests i
      perl-modules \
      psgml \
      texlive-fonts-recommended \
+     texlive-lang-greek \
      texlive-plain-generic \
      texlive-latex-extra \
      texlive-xetex \
