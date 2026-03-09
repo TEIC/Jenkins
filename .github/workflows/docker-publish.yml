@@ -11,6 +11,8 @@ on:
     - cron: '31 22 * * 3'
   # run on every push to any branch
   push:
+    branches-ignore:
+      - dependabot/*
   
 env:
   # Use docker.io for Docker Hub if empty
