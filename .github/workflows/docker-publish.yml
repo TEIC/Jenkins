@@ -46,8 +46,8 @@ jobs:
         uses: docker/login-action@v4
         with:
           registry: ${{ env.REGISTRY }}
-          username: TEITechnicalCouncil
-          password: ${{ secrets.TEITECHNICALCOUNCIL_PACKAGES_TOKEN }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
       
       # Login against DockerHub registry except on PR
       - name: Log in to DockerHub
